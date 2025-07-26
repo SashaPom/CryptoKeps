@@ -1,5 +1,7 @@
 # Compiled class file
 *.class
+.idea/workspace.xml
+.DS_Store
 
 # Log file
 *.log

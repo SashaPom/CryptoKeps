@@ -1,0 +1,14 @@
+<changelist name="Uncommitted_changes_before_rebase_[Changes]" date="1739321984398" recycled="false" toDelete="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before rebase [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="Backend/src/main/java/com/trading/bybit_api/account/wallet-service/.mvn/wrapper/maven-wrapper.jar" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/../../₿CryptoKeps/Platform/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/maven-wrapper.jar" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="Backend/src/main/java/com/trading/user/authentication-service/.mvn/wrapper/maven-wrapper.jar" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/../../₿CryptoKeps/Platform/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/maven-wrapper1.jar" />
+  </binary>
+</changelist>

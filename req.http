@@ -1,0 +1,13 @@
+### Отправка торгового сигнала на локальный сервер
+POST http://localhost:8080/api/v1/webhook/signal
+Content-Type: application/json
+
+{
+  "symbol": "SOLUSDT",
+  "side": "buy",
+  "orderType": "MARKET",
+  "keyName": "BybitDemoAPI",
+  "atr": 1,
+  "price": 180.00,
+  "accountId": "64312ca0-37c4-43eb-babe-204be1be94a9"
+}

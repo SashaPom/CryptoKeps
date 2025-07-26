@@ -1,0 +1,273 @@
+POST http://localhost:8080/api/v1/webhook/signal
+Content-Type: application/json
+Content-Length: 182
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "symbol": "SOLUSDT",
+  "side": "buy",
+  "orderType": "MARKET",
+  "keyName": "BybitDemoAPI",
+  "atr": 1,
+  "price": 180.00,
+  "accountId": "64312ca0-37c4-43eb-babe-204be1be94a9"
+}
+
+<> 2025-07-21T001958.200.txt
+
+###
+
+POST http://localhost:8080/api/v1/webhook/signal
+Content-Type: application/json
+Content-Length: 183
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "symbol": "SOLUSDT",
+  "side": "sell",
+  "orderType": "MARKET",
+  "keyName": "BybitDemoAPI",
+  "atr": 1,
+  "price": 180.00,
+  "accountId": "64312ca0-37c4-43eb-babe-204be1be94a9"
+}
+
+<> 2025-07-21T001922.200.txt
+
+###
+
+POST http://localhost:8080/api/v1/webhook/signal
+Content-Type: application/json
+Content-Length: 183
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "symbol": "SOLUSDT",
+  "side": "sell",
+  "orderType": "MARKET",
+  "keyName": "BybitDemoAPI",
+  "atr": 1,
+  "price": 180.00,
+  "accountId": "64312ca0-37c4-43eb-babe-204be1be94a9"
+}
+
+<> 2025-07-21T001800.200.txt
+
+###
+
+POST http://localhost:8080/api/v1/webhook/signal
+Content-Type: application/json
+Content-Length: 182
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "symbol": "SOLUSDT",
+  "side": "buy",
+  "orderType": "MARKET",
+  "keyName": "BybitDemoAPI",
+  "atr": 1,
+  "price": 180.00,
+  "accountId": "64312ca0-37c4-43eb-babe-204be1be94a9"
+}
+
+<> 2025-07-21T001315.200.txt
+
+###
+
+POST http://localhost:8080/api/v1/webhook/signal
+Content-Type: application/json
+Content-Length: 182
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "symbol": "SOLUSDT",
+  "side": "buy",
+  "orderType": "MARKET",
+  "keyName": "BybitDemoAPI",
+  "atr": 1,
+  "price": 180.00,
+  "accountId": "64312ca0-37c4-43eb-babe-204be1be94a9"
+}
+
+<> 2025-07-21T000746.200.txt
+
+###
+
+POST http://localhost:8080/api/v1/webhook/signal
+Content-Type: application/json
+Content-Length: 182
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "symbol": "SOLUSDT",
+  "side": "buy",
+  "orderType": "MARKET",
+  "keyName": "BybitDemoAPI",
+  "atr": 1,
+  "price": 180.00,
+  "accountId": "64312ca0-37c4-43eb-babe-204be1be94a9"
+}
+
+<> 2025-07-21T000508.200.txt
+
+###
+
+POST http://localhost:8080/api/v1/webhook/signal
+Content-Type: application/json
+Content-Length: 182
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "symbol": "SOLUSDT",
+  "side": "buy",
+  "orderType": "MARKET",
+  "keyName": "BybitDemoAPI",
+  "atr": 1,
+  "price": 180.00,
+  "accountId": "64312ca0-37c4-43eb-babe-204be1be94a9"
+}
+
+<> 2025-07-21T000405.200.txt
+
+###
+
+POST http://localhost:8080/api/v1/webhook/signal
+Content-Type: application/json
+Content-Length: 186
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "symbol": "SOLUSDT",
+  "side": "buy",
+  "orderType": "MARKET",
+  "keyName": "BybitDemoAPI",
+  "atr": 0.001,
+  "price": 180.00,
+  "accountId": "64312ca0-37c4-43eb-babe-204be1be94a9"
+}
+
+<> 2025-07-21T000324.200.txt
+
+###
+
+POST http://localhost:8080/api/v1/webhook/signal
+Content-Type: application/json
+Content-Length: 186
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "symbol": "SOLUSDT",
+  "side": "buy",
+  "orderType": "MARKET",
+  "keyName": "BybitDemoAPI",
+  "atr": 0.001,
+  "price": 180.00,
+  "accountId": "64312ca0-37c4-43eb-babe-204be1be94a9"
+}
+
+<> 2025-07-20T234558.200.txt
+
+###
+
+POST http://localhost:8080/api/v1/webhook/signal
+Content-Type: application/json
+Content-Length: 185
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "symbol": "SOLUSDT",
+  "side": "buy",
+  "orderType": "MARKET",
+  "keyName": "BybitDemoAPI",
+  "atr": 1.25,
+  "price": 160.00,
+  "accountId": "64312ca0-37c4-43eb-babe-204be1be94a9"
+}
+
+<> 2025-07-20T192112.200.txt
+
+###
+
+POST http://localhost:8080/api/v1/webhook/signal
+Content-Type: application/json
+Content-Length: 185
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "symbol": "SOLUSDT",
+  "side": "buy",
+  "orderType": "MARKET",
+  "keyName": "BybitDemoAPI",
+  "atr": 1.25,
+  "price": 160.00,
+  "accountId": "64312ca0-37c4-43eb-babe-204be1be94a9"
+}
+
+<> 2025-07-20T191318.200.txt
+
+###
+
+POST http://localhost:8080/api/v1/webhook/signal
+Content-Type: application/json
+Content-Length: 185
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "symbol": "SOLUSDT",
+  "side": "buy",
+  "orderType": "MARKET",
+  "keyName": "BybitDemoAPI",
+  "atr": 1.25,
+  "price": 160.00,
+  "accountId": "64312ca0-37c4-43eb-babe-204be1be94a9"
+}
+
+<> 2025-07-20T190503.200.txt
+
+###
+
+POST http://localhost:8080/api/v1/webhook/signal
+Content-Type: application/json
+Content-Length: 185
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "symbol": "SOLUSDT",
+  "side": "buy",
+  "orderType": "MARKET",
+  "keyName": "BybitDemoAPI",
+  "atr": 1.25,
+  "price": 160.00,
+  "accountId": "64312ca0-37c4-43eb-babe-204be1be94a9"
+}
+
+<> 2025-07-20T185221.200.txt
+
+###
+

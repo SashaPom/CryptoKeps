@@ -1,0 +1,19 @@
+<changelist name="Uncommitted_changes_before_Update_at_12_02_2025,_03_42_[Changes]" date="1739324546566" recycled="false" toDelete="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_02_2025,_03_42_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 12.02.2025, 03:42 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="mvnw" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="Backend/src/main/java/com/trading/bybit_api/account/wallet-service/.mvn/wrapper/maven-wrapper.jar" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_02_2025,_03_42_[Changes]/maven-wrapper.jar" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="Backend/src/main/java/com/trading/user/authentication-service/.mvn/wrapper/maven-wrapper.jar" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_02_2025,_03_42_[Changes]/maven-wrapper1.jar" />
+  </binary>
+</changelist>

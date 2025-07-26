@@ -1,0 +1,559 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5bc63326-4049-487f-af04-0ca6a4ac5397" name="Changes" comment="Добавил в модуль strategy реализацию подмодуля risk_managment.domain Таких классов как: RiskConfigurationService, RiskManagementConfig, RiskManagementController, RiskManager.">
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/config/connection/BybitApiProperties.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/exception/OrderPlacementException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/impl/TradeHistoryServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/resources/liquibase/db.changelog-init-tables.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a5ff24a9-62f0-41bd-aee3-e0a85f2075b3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a5ff24a9-62f0-41bd-aee3-e0a85f2075b3/storage_v2/_src_/database/postgres.edMnLQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a5ff24a9-62f0-41bd-aee3-e0a85f2075b3/storage_v2/_src_/database/postgres.edMnLQ/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a5ff24a9-62f0-41bd-aee3-e0a85f2075b3/storage_v2/_src_/database/postgres.edMnLQ/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a5ff24a9-62f0-41bd-aee3-e0a85f2075b3/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/CryptoKepsApiApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/CryptoKepsApiApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bot/service/TradingBotService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/config/connection/BybitAccountConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/config/connection/BybitAccountConnector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/config/connection/BybitAccountConnectorFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/config/connection/BybitAccountConnectorFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/config/connection/BybitApiConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/config/connection/BybitApiConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/controller/AccountInfoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/controller/AccountInfoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/data_collection/HistoricalDataCollector.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/data_collection/KlineCacheManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/domain/AccountInfo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/domain/ApiError.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/domain/Balance.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/domain/Coin.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/domain/OrderRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/domain/OrderResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/domain/Position.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/domain/TradeHistory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/dto/AccountInfoDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/dto/AccountInfoDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/dto/OrderRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/dto/OrderRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/entity/AccountInfoEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/entity/AccountInfoEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/repository/AccountInfoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/repository/AccountInfoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/impl/BybitAccountInfoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/impl/BybitAccountInfoServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/impl/BybitBalanceServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/impl/BybitBalanceServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/impl/BybitOrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/impl/BybitOrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/impl/BybitPositionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/impl/BybitPositionServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/interfaces/IBybitAccountInfoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/interfaces/IBybitAccountInfoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/interfaces/IBybitBalanceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/interfaces/IBybitBalanceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/interfaces/IBybitOrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/interfaces/IBybitOrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/interfaces/IBybitPositionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/service/interfaces/IBybitPositionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/common/Constants.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/common/Utils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/config/DBConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/config/DockerSetup.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/config/LiquibaseConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/config/RestClientConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/config/WebSocketConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/data_processing/BarSeries.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/data_processing/DefaultMarketDataProcessor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/data_processing/MarketDataProcessor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/data_processing/repository/BarRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/data_processing/repository/entity/BarEntity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/data_processing/repository/mapper/BarMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/data_processing/service/BarDataService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/indicator/EMA.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/indicator/domain/EMA.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/indicator/domain/MACD.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/indicator/domain/TrendDirection.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/indicator/domain/interfaces/TrendIndicator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/indicator/entity/TradeSignalEntity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/indicator/repository/TradeSignalRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/indicator/service/EmaService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/indicator/service/MACDService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/indicator/service/TradeSignalService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/indicator/strategy/MACDStrategy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/risk_managment/RiskConfigurationService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/risk_managment/RiskManagementConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/risk_managment/RiskManagementController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/risk_managment/RiskManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/resources/liquibase/changelog.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/resources/liquibase/changelog.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/resources/liquibase/db.changelog-init-account-info.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/resources/liquibase/init_account_info.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/resources/liquibase/init_account_info.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/test/java/com/trading/bybit_api/controller/AccountInfoControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/test/java/com/trading/bybit_api/controller/AccountInfoControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/test/java/com/trading/bybit_api/service/AccountInfoServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/test/java/com/trading/bybit_api/service/AccountInfoServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/test/java/com/trading/bybit_api/service/BybitBalanceServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/test/java/com/trading/bybit_api/service/BybitBalanceServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/test/java/com/trading/bybit_api/service/BybitOrderServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/test/java/com/trading/bybit_api/service/BybitOrderServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/test/java/com/trading/bybit_api/service/BybitPositionServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/test/java/com/trading/bybit_api/service/BybitPositionServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/test/resources/sql/order-create.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/test/resources/sql/order-entry-create.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/test/resources/sql/products-create.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/index.htm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/index_files/1156764335412534" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/index_files/669b48971e50f4f7c3878514_optimized.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/index_files/Crypto keps svg.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/index_files/core-theme-5ae82daa72afa00024f5f67a.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/index_files/core.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/index_files/fbevents.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/index_files/google-fonts-5ae82daa72afa00024f5f67a.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/index_files/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/index_files/site-stat.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/index_files/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/index_files/view-5ae82daa72afa00024f5f67a.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/trading/strategy/data_processing/BarSeries.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/trading/strategy/data_processing/repository/BarRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/trading/strategy/data_processing/repository/entity/BarEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/trading/strategy/data_processing/repository/mapper/BarMapper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/trading/strategy/data_processing/service/BarDataService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Документация процеса разработки архитектуры .docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/План разработки веб.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Процесс разработки веб.docx" beforeDir="false" />
+    </list>
+    <list id="369705e2-1c44-4ae1-a15e-dae14e4710e6" name="Changese" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dockerfile" />
+        <option value="Interface" />
+        <option value="Class" />
+        <option value="HTTP Request" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <excluded-from-favorite>
+      <branch-storage>
+        <map>
+          <entry type="REMOTE">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="origin/main" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </excluded-from-favorite>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$/../../₿CryptoKeps/Platform" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="SOFT" />
+  </component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="768cde5a-0570-4a7e-9ca4-cdc5d1d8c8e9" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2smiuj9z9jFdDs3IwwSlLYcAitQ" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_directory_selection": "/Users/oleksandrpomazan/Desktop/Library/CryptoKepsPlatform/Backend/src/main/java/com/trading/bot",
+    "last_opened_file_path": "/Users/oleksandrpomazan/Desktop/Library/CryptoKepsPlatform/Backend/src/main/resources/liquibase",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "spring.configuration.checksum": "5ae9b7f211e23aac3df5f2b8f3b8eada",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.trading.bybit_api.controller" />
+      <recent name="com.trading.bybit_api.dto" />
+      <recent name="com.trading.bybit_api.entity" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Backend/src/main/resources/liquibase" />
+      <recent name="$PROJECT_DIR$/Backend/src/test/java/com/trading/bybit_api" />
+      <recent name="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy" />
+      <recent name="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy/risk_managment" />
+      <recent name="$PROJECT_DIR$/Backend/src/test/java" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Backend/src/test/java/strategy/service/impl" />
+      <recent name="$PROJECT_DIR$/Backend/src/test/resources" />
+      <recent name="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/config" />
+      <recent name="$PROJECT_DIR$/Backend/src/main/java/com/trading/bybit_api/controller" />
+      <recent name="$PROJECT_DIR$/Backend/src/main/java/com/trading/strategy" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.trading.bybit_api" />
+      <recent name="com.trading.strategy.data_processing.repository" />
+      <recent name="com.trading.bybit_api.service" />
+      <recent name="com.trading" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.trading.bybit_api.dto" />
+      <recent name="com.trading" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.CryptoKepsApiApplication">
+    <configuration name="req | Отправка торгового сигнала на локальный сервер" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/req.http" requestIdentifier="Отправка торгового сигнала на локальный сервер" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="AccountInfoControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="crypto" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.trading.bybit_api.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.trading.bybit_api.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.trading.bybit_api.controller.AccountInfoControllerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AccountInfoControllerTest.testGetAccountInfo" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="crypto" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.trading.bybit_api.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.trading.bybit_api.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.trading.bybit_api.controller.AccountInfoControllerTest" />
+      <option name="METHOD_NAME" value="testGetAccountInfo" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AuthenticationServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="crypto" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.trading.user.authentication.AuthenticationServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CryptoKepsApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="crypto" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.trading.CryptoKepsApiApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CryptoKepsPlatform" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="20" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <module name="Platform" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.trading.CryptoKepsPlatform" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StalkerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="crypto" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.trading.crypto.StalkerApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="HTTP Request.req | Отправка торгового сигнала на локальный сервер" />
+        <item itemvalue="JUnit.AccountInfoControllerTest" />
+        <item itemvalue="JUnit.AccountInfoControllerTest.testGetAccountInfo" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5bc63326-4049-487f-af04-0ca6a4ac5397" name="Changes" comment="" />
+      <changelist id="369705e2-1c44-4ae1-a15e-dae14e4710e6" name="Changese" comment="" />
+      <created>1739067378097</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1739067378097</updated>
+      <workItem from="1739067382419" duration="6024000" />
+      <workItem from="1739142048257" duration="3920000" />
+      <workItem from="1739318914257" duration="137000" />
+      <workItem from="1739321676663" duration="692000" />
+      <workItem from="1739324165119" duration="1763000" />
+      <workItem from="1739326150987" duration="588000" />
+      <workItem from="1739326742382" duration="78585000" />
+      <workItem from="1740479269043" duration="4781000" />
+      <workItem from="1740936858547" duration="18000" />
+      <workItem from="1741390165428" duration="668000" />
+      <workItem from="1742648285149" duration="49000" />
+      <workItem from="1742674138913" duration="232000" />
+      <workItem from="1742674528633" duration="36000" />
+      <workItem from="1742738712617" duration="149000" />
+      <workItem from="1742739349809" duration="27000" />
+      <workItem from="1742740140916" duration="2887000" />
+      <workItem from="1742759666368" duration="613000" />
+      <workItem from="1742767476159" duration="1909000" />
+      <workItem from="1742985787231" duration="23000" />
+      <workItem from="1743194813313" duration="640000" />
+      <workItem from="1743540434548" duration="895000" />
+      <workItem from="1749224331764" duration="472000" />
+      <workItem from="1749224820369" duration="275000" />
+      <workItem from="1749225186809" duration="307000" />
+      <workItem from="1749226255378" duration="2051000" />
+      <workItem from="1749479611379" duration="6189000" />
+      <workItem from="1749491057006" duration="9079000" />
+      <workItem from="1749644067147" duration="6445000" />
+      <workItem from="1749734746091" duration="29512000" />
+      <workItem from="1749854617667" duration="5220000" />
+      <workItem from="1750274782002" duration="4428000" />
+      <workItem from="1751554980784" duration="6224000" />
+      <workItem from="1752098779321" duration="3061000" />
+      <workItem from="1752322780332" duration="51512000" />
+      <workItem from="1753558218914" duration="1649000" />
+    </task>
+    <task id="LOCAL-00001" summary="Added proj-skeleton">
+      <option name="closed" value="true" />
+      <created>1739324798905</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1739324798905</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Частично заполнил сырым кодом проект.">
+      <option name="closed" value="true" />
+      <created>1739324992491</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1739324992491</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Частично заполнил сырым кодом проект.">
+      <option name="closed" value="true" />
+      <created>1739325021561</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1739325021561</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Частично заполнил сырым кодом проект.">
+      <option name="closed" value="true" />
+      <created>1739325031885</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1739325031885</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Частично заполнил сырым кодом проект.">
+      <option name="closed" value="true" />
+      <created>1739444918820</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1739444918820</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Добавил реализацию байбит апи конфига">
+      <option name="closed" value="true" />
+      <created>1740166334650</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1740166334650</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Добавил реализацию байбит апи конфига">
+      <option name="closed" value="true" />
+      <created>1740166401563</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1740166401563</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Добавил реализацию модуля bot">
+      <option name="closed" value="true" />
+      <created>1740166517316</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1740166517316</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Добавил реализацию подмодуля data_collection. Таких классов как HistoricalDataCollector, KlineCacheManager.">
+      <option name="closed" value="true" />
+      <created>1740166613317</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1740166613317</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Добавил модуль strategy. Реализация подмодуля data_processing. Таких классов как: barSeries, barRepo, BarMapper, BarEntity, BarSataService.">
+      <option name="closed" value="true" />
+      <created>1740166798799</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1740166798799</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Добавил модуль strategy. Реализация подмодуля data_processing. Таких классов как: barSeries, barRepo, BarMapper, BarEntity, BarSataService.">
+      <option name="closed" value="true" />
+      <created>1740166848053</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1740166848053</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Добавил в модуль strategy реализацию подмодуля data_processing. Таких классов как: barSeries, barRepo, BarMapper, BarEntity, BarSataService.">
+      <option name="closed" value="true" />
+      <created>1740166954053</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1740166954053</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Добавил в модуль strategy реализацию подмодуля domain. Таких классов как: Kline, KlineInterval, Signal, SignalType, TimePeriod.">
+      <option name="closed" value="true" />
+      <created>1740167071763</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1740167071763</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Добавил в модуль strategy реализацию подмодуля exception. Таких классов как: InsufficientDataException.">
+      <option name="closed" value="true" />
+      <created>1740167116998</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1740167116998</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Добавил в модуль strategy реализацию подмодуля risk_managment.domain Таких классов как: RiskConfigurationService, RiskManagementConfig, RiskManagementController, RiskManager.">
+      <option name="closed" value="true" />
+      <created>1740167252723</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1740167252723</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Добавил в модуль strategy реализацию подмодуля indicator.strategy/service Таких классов как: EMA, MACD, RiskManagementController, TradeSignalEntity, TradeSignalRepository,TrendDirection,EmaService,MACDService,TradeSignalService,MACDStrategy,">
+      <option name="closed" value="true" />
+      <created>1740167432666</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1740167432666</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Добавил в модуль strategy реализацию подмодуля risk_managment.domain Таких классов как: RiskConfigurationService, RiskManagementConfig, RiskManagementController, RiskManager.">
+      <option name="closed" value="true" />
+      <created>1740167487784</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1740167487784</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="HEAD" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="*" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/Basic-architecture" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="TEXT_FILTER_SETTINGS">
+                <TextFilterSettings>
+                  <option name="MATCH_CASE" value="true" />
+                  <option name="REGEX" value="true" />
+                </TextFilterSettings>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Частично заполнил кодом большую часть модулей." />
+    <MESSAGE value="Added proj-skeleton" />
+    <MESSAGE value="Частично заполнил сырым кодом проект." />
+    <MESSAGE value="Добавил реализацию байбит апи конфига" />
+    <MESSAGE value="Добавил реализацию модуля bot" />
+    <MESSAGE value="Добавил реализацию подмодуля data_collection. Таких классов как HistoricalDataCollector, KlineCacheManager." />
+    <MESSAGE value="Добавил модуль strategy. Реализация подмодуля data_processing. Таких классов как: barSeries, barRepo, BarMapper, BarEntity, BarSataService." />
+    <MESSAGE value="Добавил в модуль strategy реализацию подмодуля data_processing. Таких классов как: barSeries, barRepo, BarMapper, BarEntity, BarSataService." />
+    <MESSAGE value="Добавил в модуль strategy реализацию подмодуля domain. Таких классов как: Kline, KlineInterval, Signal, SignalType, TimePeriod." />
+    <MESSAGE value="Добавил в модуль strategy реализацию подмодуля exception. Таких классов как: InsufficientDataException." />
+    <MESSAGE value="Добавил в модуль strategy реализацию подмодуля indicator.strategy/service Таких классов как: EMA, MACD, RiskManagementController, TradeSignalEntity, TradeSignalRepository,TrendDirection,EmaService,MACDService,TradeSignalService,MACDStrategy," />
+    <MESSAGE value="Добавил в модуль strategy реализацию подмодуля risk_managment.domain Таких классов как: RiskConfigurationService, RiskManagementConfig, RiskManagementController, RiskManager." />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавил в модуль strategy реализацию подмодуля risk_managment.domain Таких классов как: RiskConfigurationService, RiskManagementConfig, RiskManagementController, RiskManager." />
+  </component>
+</project>

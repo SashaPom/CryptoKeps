@@ -1,3 +1,0 @@
-databaseChangeLog:
-  - include:
-      file: liquibase/db.changelog-init-tables.yaml

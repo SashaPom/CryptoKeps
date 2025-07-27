@@ -17,11 +17,6 @@ public class BybitAccountConnector {
     private final BybitApiMarketRestClient marketRestClient;
     private final BybitApiPositionRestClient positionRestClient;
 
-    /**
-     * Конструктор, который принимает API-ключ и секрет.
-     * Обратите внимание, что ключи и секреты хранятся в
-     * базе данных и достаются по ИД от туда.
-     */
     public BybitAccountConnector(String apiKey, String apiSecret, boolean useDemo) {
         if (apiKey == null || apiKey.isEmpty() || apiSecret == null || apiSecret.isEmpty()) {
             this.apiRestClient = null;

@@ -2,6 +2,7 @@
 *.class
 .idea/workspace.xml
 .DS_Store
+.target/
 
 # Log file
 *.log

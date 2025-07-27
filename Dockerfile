@@ -1,4 +1,14 @@
-FROM ubuntu:latest
-LABEL authors="oleksandrpomazan"
+FROM maven:3.9.9-amazoncorretto-21-debian AS build
+WORKDIR /app
+COPY pom.xml .
+COPY Backend/src ./src
+RUN mvn clean package -DskipTests
 
-ENTRYPOINT ["top", "-b"]
+FROM amazoncorretto:21
+WORKDIR /app
+
+COPY --from=build /app/target/*.jar app.jar
+
+RUN mkdir -p /app/logs
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

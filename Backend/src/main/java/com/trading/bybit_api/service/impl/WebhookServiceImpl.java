@@ -115,7 +115,8 @@ public class WebhookServiceImpl implements IWebhookService {
                 }
 
                 log.info("Closing position: Selling {} of {}", totalBalance, adjustedSymbol);
-                positionService.closePosition(adjustedSymbol, accountInfo, quantity.setScale(1, RoundingMode.HALF_UP), entryPrice);                return "Closed position successfully.";
+                positionService.closePosition(adjustedSymbol, accountInfo, quantity.setScale(1, RoundingMode.HALF_UP), entryPrice);
+                return "Closed position successfully.";
             }
 
             return "Invalid signal side: " + signal.getSide();

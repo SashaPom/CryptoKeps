@@ -4,12 +4,14 @@ import com.bybit.api.client.domain.CategoryType;
 import com.bybit.api.client.domain.TradeOrderType;
 import com.bybit.api.client.domain.position.request.PositionDataRequest;
 import com.bybit.api.client.domain.trade.Side;
+import com.bybit.api.client.domain.trade.response.OrderResult;
 import com.bybit.api.client.restApi.BybitApiPositionRestClient;
 import com.trading.bybit_api.config.connection.BybitAccountConnector;
 import com.trading.bybit_api.config.connection.BybitAccountConnectorFactory;
 import com.trading.bybit_api.config.connection.BybitApiProperties;
 import com.trading.bybit_api.dto.AccountInfoDto;
 import com.trading.bybit_api.dto.OrderRequestDto;
+import com.trading.bybit_api.dto.OrderResponseDto;
 import com.trading.bybit_api.dto.PositionDto;
 import com.trading.bybit_api.entity.AccountInfoEntity;
 import com.trading.bybit_api.entity.TradeHistoryEntity;
@@ -78,7 +80,7 @@ public class BybitPositionServiceImpl implements IBybitPositionService {
                 .stopLoss(stopLoss)
                 .build();
 
-        orderService.placeOrder(newOrder, accountInfo);
+        OrderResponseDto res = orderService.placeOrder(newOrder, accountInfo);
         tradeHistoryService.saveTrade(newOrder, accountInfo); // Сохраняем историю сделки
         log.info("Long position placed successfully: {}", newOrder);
     }

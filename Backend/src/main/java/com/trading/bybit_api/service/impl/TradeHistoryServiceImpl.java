@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Slf4j
 @Service
@@ -34,7 +36,7 @@ public class TradeHistoryServiceImpl implements ITradeHistoryService {
                 .entryPrice(orderRequest.getPrice())
                 .stopLoss(orderRequest.getStopLoss())
                 .takeProfit(orderRequest.getTakeProfit())
-                .timestamp(LocalDateTime.now())
+                .timestamp(ZonedDateTime.now(ZoneId.of("Europe/Kyiv")).toLocalDateTime())
                 .build();
 
         tradeHistoryRepository.save(tradeHistory);

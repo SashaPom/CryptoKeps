@@ -66,7 +66,7 @@ public class BybitOrderServiceImpl implements IBybitOrderService {
                     String retMsg = String.valueOf(responseMap.get("retMsg"));
 
                     // Проверяем, есть ли ошибка в `retMsg`
-                    if (ERROR_WORDS.stream().anyMatch(retMsg::contains)) {
+                    if (!retMsg.contains("OK") && ERROR_WORDS.stream().anyMatch(retMsg::contains)) {
                         log.error("Error placing order: {}", retMsg);
                         throw new OrderPlacementException("Error placing order: " + retMsg);
                     } else {

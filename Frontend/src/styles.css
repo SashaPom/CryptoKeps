@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light; }
+.dark { color-scheme: dark; }
+html, body, #root { height: 100%; }
+/* чуть мягче при переключении темы */
+* { transition: background-color .15s linear, color .15s linear, border-color .15s linear; }

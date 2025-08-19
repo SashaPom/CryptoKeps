@@ -1,0 +1,103 @@
+services:
+  # PostgreSQL для Java
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"              # в проде обычно убираем наружу
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Java backend
+  java:
+    build:
+      context: ..             # <-- Dockerfile в корне CK
+      dockerfile: ../Dockerfile
+    # image: yourorg/java:prod   # для прода вместо build
+    env_file:
+      - ../.env               # если используешь .env из CK
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod                # в деве можешь поставить dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
+      SPRING_LIQUIBASE_ENABLED: "true"
+    expose:
+      - "8080"                                   # внутренняя видимость для gateway
+    volumes:
+      - ../CK/logs:/app/logs
+      - ../CK/config:/app/config
+    # ports:
+    #   - "8080:8080"          # локально НЕ обязательно, gateway ходит по сети docker
+
+  # Django API
+  django:
+    build: ../../tw-m-main
+    # image: yourorg/django:prod
+    expose: ["8001"]
+    environment:
+      - SECRET_KEY=${DJ_SECRET_KEY:-dev}         # в проде задай секрет
+      - DEBUG=${DJ_DEBUG:-true}                  # в проде false
+      - ALLOWED_HOSTS=*
+      - LIMIT_PROFILES=1000
+      - WS_PROTOCOL=ws                           # в проде может быть wss за внешним nginx/traefik
+
+  # Watcher OKX
+  watcher-okx:
+    build: ../../tw-main
+    env_file: ../../tw-main/.env.okx
+    ports: ["8889:8889"]                         # публикуем наружу для теста; в проде можно убрать
+    environment:
+      MAIN_SERVER_PROTOCOL: http                 # в проде https
+      MAIN_SERVER_ADDRESS: django
+      MAIN_SERVER_PORT: 8001
+      WS_ADDRESS: 0.0.0.0
+      WS_PORT: 8889
+      # SSL для продакшена:
+      # SSL_CERTFILE: /etc/letsencrypt/live/cryptokeps.com/fullchain.pem
+      # SSL_KEYFILE:  /etc/letsencrypt/live/cryptokeps.com/privkey.pem
+    # volumes:
+    #   - /etc/letsencrypt:/etc/letsencrypt:ro   # включить в проде
+
+  # Watcher Binance
+  watcher-binance:
+    build: ../../tw-main
+    env_file: ../../tw-main/.env.binance
+    ports: ["8890:8890"]
+    environment:
+      MAIN_SERVER_PROTOCOL: http                 # в проде https
+      MAIN_SERVER_ADDRESS: django
+      MAIN_SERVER_PORT: 8001
+      WS_ADDRESS: 0.0.0.0
+      WS_PORT: 8890
+      # SSL для продакшена:
+      # SSL_CERTFILE: /etc/letsencrypt/live/cryptokeps.com/fullchain.pem
+      # SSL_KEYFILE:  /etc/letsencrypt/live/cryptokeps.com/privkey.pem
+    # volumes:
+    #   - /etc/letsencrypt:/etc/letsencrypt:ro
+
+  # Gateway (UI ходит сюда на /api/** и /ws/**)
+  gateway:
+    build: ../gateway
+    # image: yourorg/gateway:prod
+    ports: ["8080:8080"]
+    depends_on: [django, java, watcher-okx, watcher-binance]
+
+networks:
+  default:
+    name: appnet
+
+volumes:
+  postgres-data:

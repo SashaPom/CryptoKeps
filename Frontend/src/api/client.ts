@@ -1,4 +1,19 @@
-export async function fetchJson<T>(input: RequestInfo | URL, init: RequestInit = {}): Promise<T> {
+// Универсальный HTTP-клиент. Все запросы идут через /api → gateway:8080
+
+type GRequestInit = globalThis.RequestInit;
+type GHeadersInit = globalThis.HeadersInit;
+
+function buildInit(init?: GRequestInit): GRequestInit {
+    const { headers: raw, ...rest } =
+        (init ?? {}) as GRequestInit & { headers?: GHeadersInit };
+
+    const headers = new Headers(raw);
+    if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+
+    return { ...rest, headers: headers as GHeadersInit };
+}
+
+export async function api<T>(input: RequestInfo | URL, init: RequestInit = {}): Promise<T> {
     // Собираем заголовки из любых возможных форматов (Headers | массив | объект)
     const headers = new Headers(init.headers);
 
@@ -7,10 +22,7 @@ export async function fetchJson<T>(input: RequestInfo | URL, init: RequestInit =
         headers.set("Content-Type", "application/json");
     }
 
-    const res = await fetch(input, {
-        ...init,
-        headers, // <= передаем уже нормализованный Headers
-    });
+    const res = await fetch(input, buildInit(init));
 
     if (!res.ok) {
         const text = await res.text().catch(() => "");
@@ -24,4 +36,21 @@ export async function fetchJson<T>(input: RequestInfo | URL, init: RequestInit =
     }
 
     return res.json() as Promise<T>;
+}
+
+/** Django TW API (риск-менеджер) */
+export const TwApi = {
+    listProfiles: () => api('/api/py/dj/tw/api/watcher/profiles/'),
+    create: (payload: any) => api('/api/py/dj/tw/create/', { method: 'POST', body: JSON.stringify(payload) }),
+    start: (id: number) => api('/api/py/dj/tw/start/', { method: 'POST', body: JSON.stringify({ id }) }),
+    stop:  (id: number) => api('/api/py/dj/tw/stop/',  { method: 'POST', body: JSON.stringify({ id }) }),
+};
+
+/* ---------- helpers ---------- */
+function isEmptyBody(res: Response) {
+    const len = res.headers.get("content-length");
+    return len === "0" || len === null;
+}
+async function safeReadText(res: Response) {
+    try { return await res.text(); } catch { return ""; }
 }

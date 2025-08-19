@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/bots/{botId}/trades")
+@RequestMapping("/bots/{botId}/trades")
 @RequiredArgsConstructor
 public class TradeController {
 

@@ -7,6 +7,7 @@ import "./styles.css";
 import Bots from "./pages/Bots";
 import Accounts from "./pages/Accounts";
 import Monitor from "./pages/Monitor";
+import RiskManager from "./pages/RiskManager";
 
 const router = createBrowserRouter([
     {
@@ -16,7 +17,8 @@ const router = createBrowserRouter([
             { index: true, element: <Bots /> },
             { path: "bots", element: <Bots /> },
             { path: "accounts", element: <Accounts /> },
-            { path: "monitor", element: <Monitor /> }
+            { path: "monitor", element: <Monitor /> },
+            { path: "risk", element: <RiskManager /> },
         ]
     }
 ]);

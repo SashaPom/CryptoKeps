@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dataSource name="postgres@localhost">
+<dataSource name="bdLocal@localhost">
   <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.49">
     <root id="1">
       <DateStyle>mdy</DateStyle>
@@ -11,9 +11,9 @@
 4||10|c|G
 4||10|C|G
 4||10|T|G</Grants>
-      <IntrospectionStateNumber>829</IntrospectionStateNumber>
+      <IntrospectionStateNumber>757</IntrospectionStateNumber>
       <ServerVersion>17.5</ServerVersion>
-      <StartupTime>1752939350</StartupTime>
+      <StartupTime>1755025156</StartupTime>
       <TimeZones>true ACDT
 true ACSST
 false ACST
@@ -1410,7 +1410,7 @@ true posixrules
 13219||10|C|G
 13219||-9223372036854775808|U|G
 13219||10|U|G</Grants>
-      <IntrospectionStateNumber>829</IntrospectionStateNumber>
+      <IntrospectionStateNumber>757</IntrospectionStateNumber>
       <ObjectId>5</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
@@ -4832,22 +4832,22 @@ true posixrules
     <schema id="264" parent="2" name="public">
       <Comment>standard public schema</Comment>
       <Current>1</Current>
-      <IntrospectionStateNumber>829</IntrospectionStateNumber>
-      <IntrospectionTimestamp>2025-07-19.18:43:00.171</IntrospectionTimestamp>
-      <LocalIntrospectionTimestamp>2025-07-19.15:43:01</LocalIntrospectionTimestamp>
+      <IntrospectionStateNumber>757</IntrospectionStateNumber>
+      <IntrospectionTimestamp>2025-08-12.22:48:09.728</IntrospectionTimestamp>
+      <LocalIntrospectionTimestamp>2025-08-12.19:48:10</LocalIntrospectionTimestamp>
       <ObjectId>2200</ObjectId>
       <StateNumber>532</StateNumber>
       <OwnerName>pg_database_owner</OwnerName>
     </schema>
     <table id="265" parent="264" name="account_info">
       <ObjectId>16384</ObjectId>
-      <StateNumber>744</StateNumber>
+      <StateNumber>743</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
     <table id="266" parent="264" name="trade_history">
       <ObjectId>16391</ObjectId>
-      <StateNumber>744</StateNumber>
+      <StateNumber>743</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
@@ -4855,32 +4855,32 @@ true posixrules
       <DasType>uuid|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>740</StateNumber>
+      <StateNumber>739</StateNumber>
       <TypeId>2950</TypeId>
     </column>
     <column id="268" parent="265" name="api_key">
       <DasType>varchar(255)|0s</DasType>
       <Position>2</Position>
-      <StateNumber>740</StateNumber>
+      <StateNumber>739</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="269" parent="265" name="api_secret">
       <DasType>varchar(255)|0s</DasType>
       <Position>3</Position>
-      <StateNumber>740</StateNumber>
+      <StateNumber>739</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="270" parent="265" name="is_connected">
       <DasType>boolean|0s</DasType>
       <Position>4</Position>
-      <StateNumber>740</StateNumber>
+      <StateNumber>739</StateNumber>
       <TypeId>16</TypeId>
     </column>
     <column id="271" parent="265" name="key_name">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
-      <StateNumber>740</StateNumber>
+      <StateNumber>739</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <index id="272" parent="265" name="account_info_pkey">
@@ -4888,14 +4888,14 @@ true posixrules
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>16389</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>740</StateNumber>
+      <StateNumber>739</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
     <index id="273" parent="265" name="uk4iad2dpk254atl0o40llhsl7p">
       <ColNames>key_name</ColNames>
       <ObjectId>16399</ObjectId>
-      <StateNumber>743</StateNumber>
+      <StateNumber>742</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
       <CollationNames>default</CollationNames>
@@ -4906,96 +4906,96 @@ true posixrules
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>16390</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>740</StateNumber>
+      <StateNumber>739</StateNumber>
       <UnderlyingIndexId>16389</UnderlyingIndexId>
     </key>
     <key id="275" parent="265" name="uk4iad2dpk254atl0o40llhsl7p">
       <ObjectId>16400</ObjectId>
-      <StateNumber>743</StateNumber>
+      <StateNumber>742</StateNumber>
       <UnderlyingIndexId>16399</UnderlyingIndexId>
     </key>
     <check id="276" parent="266" name="trade_history_side_check">
       <ColNames>side</ColNames>
       <ObjectId>16394</ObjectId>
       <Predicate>(side)::text = ANY ((ARRAY[&apos;BUY&apos;::character varying, &apos;SELL&apos;::character varying])::text[])</Predicate>
-      <StateNumber>741</StateNumber>
+      <StateNumber>740</StateNumber>
     </check>
     <column id="277" parent="266" name="id">
       <DasType>uuid|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>741</StateNumber>
+      <StateNumber>740</StateNumber>
       <TypeId>2950</TypeId>
     </column>
     <column id="278" parent="266" name="close_price">
       <DasType>numeric(38,2 digit)|0s</DasType>
       <Position>2</Position>
-      <StateNumber>741</StateNumber>
+      <StateNumber>740</StateNumber>
       <TypeId>1700</TypeId>
     </column>
     <column id="279" parent="266" name="entry_price">
       <DasType>numeric(38,2 digit)|0s</DasType>
       <Position>3</Position>
-      <StateNumber>741</StateNumber>
+      <StateNumber>740</StateNumber>
       <TypeId>1700</TypeId>
     </column>
     <column id="280" parent="266" name="pnl">
       <DasType>numeric(38,2 digit)|0s</DasType>
       <Position>4</Position>
-      <StateNumber>741</StateNumber>
+      <StateNumber>740</StateNumber>
       <TypeId>1700</TypeId>
     </column>
     <column id="281" parent="266" name="quantity">
       <DasType>numeric(38,2 digit)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
-      <StateNumber>741</StateNumber>
+      <StateNumber>740</StateNumber>
       <TypeId>1700</TypeId>
     </column>
     <column id="282" parent="266" name="side">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>6</Position>
-      <StateNumber>741</StateNumber>
+      <StateNumber>740</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="283" parent="266" name="stop_loss">
       <DasType>numeric(38,2 digit)|0s</DasType>
       <Position>7</Position>
-      <StateNumber>741</StateNumber>
+      <StateNumber>740</StateNumber>
       <TypeId>1700</TypeId>
     </column>
     <column id="284" parent="266" name="symbol">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>8</Position>
-      <StateNumber>741</StateNumber>
+      <StateNumber>740</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="285" parent="266" name="take_profit">
       <DasType>numeric(38,2 digit)|0s</DasType>
       <Position>9</Position>
-      <StateNumber>741</StateNumber>
+      <StateNumber>740</StateNumber>
       <TypeId>1700</TypeId>
     </column>
     <column id="286" parent="266" name="timestamp">
       <DasType>timestamp(6)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>10</Position>
-      <StateNumber>741</StateNumber>
+      <StateNumber>740</StateNumber>
       <TypeId>1114</TypeId>
     </column>
     <column id="287" parent="266" name="account_id">
       <DasType>uuid|0s</DasType>
       <NotNull>1</NotNull>
       <Position>11</Position>
-      <StateNumber>741</StateNumber>
+      <StateNumber>740</StateNumber>
       <TypeId>2950</TypeId>
     </column>
     <foreign-key id="288" parent="266" name="fko3de2urwd9yxdcm4vheb6jrfc">
       <ColNames>account_id</ColNames>
       <ObjectId>16401</ObjectId>
-      <StateNumber>744</StateNumber>
+      <StateNumber>743</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>16384</RefTableId>
     </foreign-key>
@@ -5004,7 +5004,7 @@ true posixrules
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>16397</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>741</StateNumber>
+      <StateNumber>740</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
@@ -5012,7 +5012,7 @@ true posixrules
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>16398</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>741</StateNumber>
+      <StateNumber>740</StateNumber>
       <UnderlyingIndexId>16397</UnderlyingIndexId>
     </key>
   </database-model>

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Link, Outlet, useLocation} from "react-router-dom";
-import logoUrl from "./assets/logo.png"; // put your logo file here
+import logoUrl from "./assets/logo.png";
 
 function useTheme() {
     const [theme, setTheme] = useState<"light" | "dark">(() => {
@@ -43,6 +43,7 @@ export default function App() {
                         <NavLink to="/bots" label="Bots"/>
                         <NavLink to="/accounts" label="Accounts"/>
                         <NavLink to="/monitor" label="Monitor"/>
+                        <NavLink to="/risk" label="Risk Manager" />
                         <button
                             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                             className="ml-3 text-xs px-2 py-1 rounded-lg border border-white/20 text-white hover:bg-white/10"

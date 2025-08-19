@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: django
+          uri: http://django:8001
+          predicates:
+            - Path=/api/py/dj/**
+          filters:
+            - StripPrefix=3
+
+        - id: java
+          uri: http://java:8080
+          predicates:
+            - Path=/api/java/**
+          filters:
+            - StripPrefix=2
+
+        - id: watcher-okx
+          uri: ws://watcher-okx:8889
+          predicates:
+            - Path=/ws/okx/**
+          filters:
+            - StripPrefix=2
+
+        - id: watcher-binance
+          uri: ws://watcher-binance:8890
+          predicates:
+            - Path=/ws/binance/**
+          filters:
+            - StripPrefix=2

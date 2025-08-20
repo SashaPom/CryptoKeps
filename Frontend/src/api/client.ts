@@ -38,14 +38,6 @@ export async function api<T>(input: RequestInfo | URL, init: RequestInit = {}): 
     return res.json() as Promise<T>;
 }
 
-/** Django TW API (риск-менеджер) */
-export const TwApi = {
-    listProfiles: () => api('/api/py/dj/tw/api/watcher/profiles/'),
-    create: (payload: any) => api('/api/py/dj/tw/create/', { method: 'POST', body: JSON.stringify(payload) }),
-    start: (id: number) => api('/api/py/dj/tw/start/', { method: 'POST', body: JSON.stringify({ id }) }),
-    stop:  (id: number) => api('/api/py/dj/tw/stop/',  { method: 'POST', body: JSON.stringify({ id }) }),
-};
-
 /* ---------- helpers ---------- */
 function isEmptyBody(res: Response) {
     const len = res.headers.get("content-length");

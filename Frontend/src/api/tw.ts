@@ -1,21 +1,27 @@
-export async function api(path: string, init: RequestInit = {}): Promise<any> {
-    const headers = new Headers(init.headers);
+import { api } from "./client";
+import type { TwCreatePayload, TwProfile } from "../types/tw";
 
-    if (!headers.has("Content-Type")) {
-        headers.set("Content-Type", "application/json");
-    }
 
-    // Собираем объект отдельно
-    const requestInit: RequestInit = {
-        ...init,
-        headers: headers as HeadersInit, // явный каст
-    };
+/** Django TW API (риск-менеджер) */
 
-    const res: Response = await fetch(`/api${path}`, requestInit);
+export const TwApi = {
+    listProfiles: () => api<TwProfile[]>('/api/py/dj/tw/api/watcher/profiles/'),
 
-    if (!res.ok) {
-        throw new Error(`${res.status} ${await res.text()}`);
-    }
+    create: (payload: TwCreatePayload) =>
+        api<{ id: number }>('/py/dj/tw/create/', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+        }),
 
-    return res.json();
-}
+    start: (id: number) =>
+        api<{ ok: true }>('/py/dj/tw/start/', {
+            method: 'POST',
+            body: JSON.stringify({ id }),
+        }),
+
+    stop: (id: number) =>
+        api<{ ok: true }>('/py/dj/tw/stop/', {
+            method: 'POST',
+            body: JSON.stringify({ id }),
+        }),
+};

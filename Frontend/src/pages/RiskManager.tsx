@@ -2,6 +2,12 @@ import {useEffect, useMemo, useState} from "react";
 import {TwApi} from "../api/tw";
 import {TwCreatePayload, TwProfile} from "../types/tw";
 
+const DEMO_MODE = true;
+
+const demoProfiles: TwProfile[] = [
+    { id: 101, name: "OKX Alpha", status: "running" },
+    { id: 102, name: "Binance Demo", status: "stopped" },
+];
 
 export default function RiskManager() {
     const [profiles, setProfiles] = useState<TwProfile[]>([]);
@@ -13,6 +19,10 @@ export default function RiskManager() {
 
 
     useEffect(() => {
+        if (DEMO_MODE) {
+            setProfiles(demoProfiles);
+            return;
+        }
         refresh();
 
         // Подписка на оба канала (если нужны сразу)

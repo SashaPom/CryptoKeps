@@ -9,6 +9,19 @@ import Accounts from "./pages/Accounts";
 import Monitor from "./pages/Monitor";
 import RiskManager from "./pages/RiskManager";
 
+import {loadBasicAuthFromStorage, setBasicAuth} from "./api/client";
+
+loadBasicAuthFromStorage();
+
+// // только в dev:
+// if (import.meta.env.DEV) {
+//     // @ts-ignore
+//     const u = import.meta.env.VITE_GATEWAY_USER;
+//     // @ts-ignore
+//     const p = import.meta.env.VITE_GATEWAY_PASS;
+//     if (u && p) setBasicAuth(u, p);
+// }
+
 const router = createBrowserRouter([
     {
         path: "/",
@@ -28,3 +41,4 @@ createRoot(document.getElementById("root")!).render(
         <RouterProvider router={router} />
     </React.StrictMode>
 );
+

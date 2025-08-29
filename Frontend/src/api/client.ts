@@ -3,37 +3,51 @@
 type GRequestInit = globalThis.RequestInit;
 type GHeadersInit = globalThis.HeadersInit;
 
+// ===== BasicAuth storage =====
+let _basicAuth: string | null = null;
+
+export function setBasicAuth(username: string, password: string) {
+    _basicAuth = `Basic ${btoa(`${username}:${password}`)}`;
+    try { localStorage.setItem("basicAuth", _basicAuth); } catch {}
+}
+
+export function loadBasicAuthFromStorage() {
+    try {
+        const v = localStorage.getItem("basicAuth");
+        if (v) _basicAuth = v;
+    } catch {}
+}
+
+export function clearBasicAuth() {
+    _basicAuth = null;
+    try { localStorage.removeItem("basicAuth"); } catch {}
+}
+
 function buildInit(init?: GRequestInit): GRequestInit {
     const { headers: raw, ...rest } =
         (init ?? {}) as GRequestInit & { headers?: GHeadersInit };
 
     const headers = new Headers(raw);
-    if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
-
-    return { ...rest, headers: headers as GHeadersInit };
-}
-
-export async function api<T>(input: RequestInfo | URL, init: RequestInit = {}): Promise<T> {
-    // Собираем заголовки из любых возможных форматов (Headers | массив | объект)
-    const headers = new Headers(init.headers);
-
-    // Проставим Content-Type по умолчанию, если его нет (для JSON-запросов)
     if (!headers.has("Content-Type")) {
         headers.set("Content-Type", "application/json");
     }
 
+    if (_basicAuth && !headers.has("Authorization")) {
+        headers.set("Authorization", _basicAuth);
+    }
+
+    return { ...rest, headers: headers as GHeadersInit, credentials: "include" };
+}
+
+export async function api<T>(input: RequestInfo | URL, init: RequestInit = {}): Promise<T> {
     const res = await fetch(input, buildInit(init));
 
     if (!res.ok) {
-        const text = await res.text().catch(() => "");
+        const text = await safeReadText(res);
         throw new Error(`HTTP ${res.status} ${res.statusText}${text ? `: ${text}` : ""}`);
     }
 
-    // Если тело пустое (например 204), защитимся от ошибки парсинга
-    const contentLength = res.headers.get("content-length");
-    if (res.status === 204 || contentLength === "0") {
-        return undefined as unknown as T;
-    }
+    if (isEmptyBody(res)) return undefined as unknown as T;
 
     return res.json() as Promise<T>;
 }

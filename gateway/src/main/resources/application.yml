@@ -8,9 +8,13 @@ spring:
         - id: django
           uri: http://django:8001
           predicates:
-            - Path=/api/py/dj/**
+            - Path=/api/py/dj/tw/api/**
           filters:
             - StripPrefix=3
+            - name: BasicAuth
+              args:
+                username: ${GATEWAY_BASIC_USERNAME}
+                password: ${GATEWAY_BASIC_PASSWORD}
 
         - id: java
           uri: http://java:8080
@@ -18,6 +22,10 @@ spring:
             - Path=/api/java/**
           filters:
             - StripPrefix=2
+            - name: BasicAuth
+              args:
+                username: ${GATEWAY_BASIC_USERNAME}
+                password: ${GATEWAY_BASIC_PASSWORD}
 
         - id: watcher-okx
           uri: ws://watcher-okx:8889
@@ -25,6 +33,10 @@ spring:
             - Path=/ws/okx/**
           filters:
             - StripPrefix=2
+            - name: BasicAuth
+              args:
+                username: ${GATEWAY_BASIC_USERNAME}
+                password: ${GATEWAY_BASIC_PASSWORD}
 
         - id: watcher-binance
           uri: ws://watcher-binance:8890
@@ -32,3 +44,7 @@ spring:
             - Path=/ws/binance/**
           filters:
             - StripPrefix=2
+            - name: BasicAuth
+              args:
+                username: ${GATEWAY_BASIC_USERNAME}
+                password: ${GATEWAY_BASIC_PASSWORD}

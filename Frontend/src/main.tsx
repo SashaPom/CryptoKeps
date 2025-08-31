@@ -22,6 +22,8 @@ loadBasicAuthFromStorage();
 //     if (u && p) setBasicAuth(u, p);
 // }
 
+setBasicAuth("ck_admin", "supersecret");
+
 const router = createBrowserRouter([
     {
         path: "/",

@@ -1,12 +1,22 @@
-import {useEffect, useMemo, useState} from "react";
-import {TwApi} from "../api/tw";
-import {TwCreatePayload, TwProfile} from "../types/tw";
+import React, { useEffect, useMemo, useState } from "react";
+import { TwApi } from "../api/tw";
+import type { TwCreatePayload, TwProfile } from "../types/tw";
+import ProfileCard from "../components/ProfileCard";
 
-const DEMO_MODE = true;
+/** Включи DEMO_MODE=true если нужен локальный демо-рендер без бэка */
+const DEMO_MODE = false;
 
 const demoProfiles: TwProfile[] = [
-    { id: 101, name: "OKX Alpha", status: "running" },
-    { id: 102, name: "Binance Demo", status: "stopped" },
+    { id: 101, name: "OKX Alpha", exchange: "OKX", status: "running",
+        available_balance: 0, balance: 0, max_balance: 0, pnl: 0,
+        lose_streak: 0, trade_now: false, blocked: false,
+        refresh_time: "09:00", lose_amount_limit: 10, lose_percent_limit: 5,
+        lose_streak_limit: 5, created_at: "2025-08-28" },
+    { id: 102, name: "Binance Demo", exchange: "BINANCE", status: "stopped",
+        available_balance: 0, balance: 0, max_balance: 0, pnl: 0,
+        lose_streak: 0, trade_now: false, blocked: true,
+        refresh_time: "09:00", lose_amount_limit: 10, lose_percent_limit: 5,
+        lose_streak_limit: 5, created_at: "2025-08-28" },
 ];
 
 export default function RiskManager() {
@@ -14,9 +24,14 @@ export default function RiskManager() {
     const [error, setError] = useState<string | null>(null);
     const [creating, setCreating] = useState(false);
 
-    const wsOkxUrl = useMemo(() => `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws/okx`, []);
-    const wsBinUrl = useMemo(() => `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws/binance`, []);
-
+    const wsOkxUrl = useMemo(
+        () => `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws/okx`,
+        []
+    );
+    const wsBinUrl = useMemo(
+        () => `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws/binance`,
+        []
+    );
 
     useEffect(() => {
         if (DEMO_MODE) {
@@ -25,15 +40,13 @@ export default function RiskManager() {
         }
         refresh();
 
-        // Подписка на оба канала (если нужны сразу)
+        // подписки на вотчеры (если присылают обновлённые профили)
         const okx = new WebSocket(wsOkxUrl);
         okx.onmessage = (e) => {
             try {
                 const data = JSON.parse(e.data);
-                // если бек шлет структуру с профилями
                 if (data?.profiles) setProfiles(data.profiles);
-            } catch {
-            }
+            } catch {}
         };
 
         const bin = new WebSocket(wsBinUrl);
@@ -41,8 +54,7 @@ export default function RiskManager() {
             try {
                 const data = JSON.parse(e.data);
                 if (data?.profiles) setProfiles(data.profiles);
-            } catch {
-            }
+            } catch {}
         };
 
         return () => {
@@ -56,7 +68,7 @@ export default function RiskManager() {
         setError(null);
         TwApi.listProfiles()
             .then(setProfiles)
-            .catch(err => setError(err.message || String(err)));
+            .catch((err) => setError(err.message || String(err)));
     }
 
     function start(id: number) {
@@ -71,7 +83,6 @@ export default function RiskManager() {
         <div className="p-6 space-y-4">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-semibold">Risk Manager</h1>
-
                 <button
                     onClick={() => setCreating(true)}
                     className="px-3 py-2 rounded-xl bg-black text-white hover:opacity-90"
@@ -82,51 +93,15 @@ export default function RiskManager() {
 
             {error && <div className="text-red-500">{error}</div>}
 
-            <div className="overflow-x-auto border rounded-xl bg-white">
-                <table className="min-w-full text-sm">
-                    <thead className="bg-gray-50">
-                    <tr>
-                        <th className="px-3 py-2 text-left">ID</th>
-                        <th className="px-3 py-2 text-left">Name</th>
-                        <th className="px-3 py-2 text-left">Exchange</th>
-                        <th className="px-3 py-2 text-left">Status</th>
-                        <th className="px-3 py-2 text-left">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {profiles.map(p => (
-                        <tr key={p.id} className="border-t">
-                            <td className="px-3 py-2">{p.id}</td>
-                            <td className="px-3 py-2">{p.name}</td>
-                            <td className="px-3 py-2">{p.exchange ?? "-"}</td>
-                            <td className="px-3 py-2">
-                              <span className={p.status === "running" ? "text-green-600" : "text-gray-500"}>
-                                {p.status}
-                              </span>
-                            </td>
-                            <td className="px-3 py-2 space-x-2">
-                                {p.status === "running" ? (
-                                    <button className="px-3 py-1 rounded bg-red-600 text-white"
-                                            onClick={() => stop(p.id)}>
-                                        Stop
-                                    </button>
-                                ) : (
-                                    <button className="px-3 py-1 rounded bg-green-600 text-white"
-                                            onClick={() => start(p.id)}>
-                                        Start
-                                    </button>
-                                )}
-                            </td>
-                        </tr>
-                    ))}
-                    {profiles.length === 0 && (
-                        <tr>
-                            <td className="px-3 py-6 text-gray-500" colSpan={4}>Нет профилей</td>
-                        </tr>
-                    )}
-                    </tbody>
-                </table>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {profiles.map((p) => (
+                    <ProfileCard key={p.id} p={p} onStart={start} onStop={stop} />
+                ))}
             </div>
+
+            {profiles.length === 0 && !error && (
+                <div className="text-gray-500">Нет профилей</div>
+            )}
 
             {creating && (
                 <CreateProfileModal
@@ -142,6 +117,7 @@ export default function RiskManager() {
     );
 }
 
+/* ---------- Create modal (без изменений) ---------- */
 function CreateProfileModal({
                                 onClose,
                                 onCreated,
@@ -165,7 +141,7 @@ function CreateProfileModal({
     const [submitting, setSubmitting] = useState(false);
 
     function update<K extends keyof TwCreatePayload>(k: K, v: TwCreatePayload[K]) {
-        setForm((s) => ({...s, [k]: v}));
+        setForm((s) => ({ ...s, [k]: v }));
     }
 
     async function submit() {
@@ -189,13 +165,17 @@ function CreateProfileModal({
             <div className="w-full max-w-xl rounded-2xl bg-white p-5 space-y-4">
                 <div className="flex items-center justify-between">
                     <h2 className="text-lg font-semibold">Create TW profile</h2>
-                    <button onClick={onClose} className="px-2 py-1 rounded hover:bg-gray-100">✕</button>
+                    <button onClick={onClose} className="px-2 py-1 rounded hover:bg-gray-100">
+                        ✕
+                    </button>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                     <L label="Name">
                         <input
-                            className="input" value={form.name} onChange={(e) => update("name", e.target.value)}
+                            className="input"
+                            value={form.name}
+                            onChange={(e) => update("name", e.target.value)}
                             placeholder="например profile-1"
                         />
                     </L>
@@ -213,17 +193,19 @@ function CreateProfileModal({
 
                     <L label="API key">
                         <input
-                            className="input" value={form.api_key}
+                            className="input"
+                            value={form.api_key}
                             onChange={(e) => update("api_key", e.target.value)}
                             placeholder="например my-api-key"
                         />
-
                     </L>
 
                     <L label="Secret key">
                         <input
-                            className="input" value={form.secret_key}
-                            onChange={(e) => update("secret_key", e.target.value)}/>
+                            className="input"
+                            value={form.secret_key}
+                            onChange={(e) => update("secret_key", e.target.value)}
+                        />
                     </L>
 
                     <L label="Passphrase (если требуется)">
@@ -249,7 +231,9 @@ function CreateProfileModal({
                             type="number"
                             className="input"
                             value={form.lose_percent_limit ?? ""}
-                            onChange={(e) => update("lose_percent_limit", e.target.value === "" ? null : Number(e.target.value))}
+                            onChange={(e) =>
+                                update("lose_percent_limit", e.target.value === "" ? null : Number(e.target.value))
+                            }
                             placeholder="например 5"
                         />
                     </L>
@@ -259,7 +243,9 @@ function CreateProfileModal({
                             type="number"
                             className="input"
                             value={form.lose_streak_limit ?? ""}
-                            onChange={(e) => update("lose_streak_limit", e.target.value === "" ? null : Number(e.target.value))}
+                            onChange={(e) =>
+                                update("lose_streak_limit", e.target.value === "" ? null : Number(e.target.value))
+                            }
                             placeholder="например 3"
                         />
                     </L>
@@ -269,7 +255,9 @@ function CreateProfileModal({
                             type="number"
                             className="input"
                             value={form.lose_amount_limit ?? ""}
-                            onChange={(e) => update("lose_amount_limit", e.target.value === "" ? null : Number(e.target.value))}
+                            onChange={(e) =>
+                                update("lose_amount_limit", e.target.value === "" ? null : Number(e.target.value))
+                            }
                             placeholder="например 50"
                         />
                     </L>
@@ -289,15 +277,12 @@ function CreateProfileModal({
                 </div>
             </div>
 
-            {/* маленький tailwind-хак */}
-            <style>
-                {`.input{ @apply w-full px-3 py-2 rounded-xl border outline-none focus:ring focus:border-black/50; }`}
-            </style>
+            <style>{`.input{ @apply w-full px-3 py-2 rounded-xl border outline-none focus:ring focus:border-black/50; }`}</style>
         </div>
     );
 }
 
-function L({label, children}: { label: string; children: React.ReactNode }) {
+function L({ label, children }: { label: string; children: React.ReactNode }) {
     return (
         <label className="space-y-1">
             <div className="text-xs text-gray-600">{label}</div>

@@ -2,6 +2,8 @@
 
 type GRequestInit = globalThis.RequestInit;
 type GHeadersInit = globalThis.HeadersInit;
+type GRequestInfo = globalThis.RequestInfo | URL;
+
 
 // ===== BasicAuth storage =====
 let _basicAuth: string | null = null;
@@ -39,23 +41,25 @@ function buildInit(init?: GRequestInit): GRequestInit {
     return { ...rest, headers: headers as GHeadersInit, credentials: "include" };
 }
 
-export async function api<T>(input: RequestInfo | URL, init: RequestInit = {}): Promise<T> {
-    const res = await fetch(input, buildInit(init));
+export async function api<T>(input: GRequestInfo, init: GRequestInit = {}): Promise<T> {
+    const res = await fetch(input as RequestInfo, buildInit(init) as RequestInit);
 
     if (!res.ok) {
         const text = await safeReadText(res);
         throw new Error(`HTTP ${res.status} ${res.statusText}${text ? `: ${text}` : ""}`);
     }
 
-    if (isEmptyBody(res)) return undefined as unknown as T;
-
+    if (isEmptyBody(res)) {
+        return undefined as unknown as T;
+    }
     return res.json() as Promise<T>;
 }
 
 /* ---------- helpers ---------- */
 function isEmptyBody(res: Response) {
+    if (res.status === 204 || res.status === 205) return true;
     const len = res.headers.get("content-length");
-    return len === "0" || len === null;
+    return len === "0";
 }
 async function safeReadText(res: Response) {
     try { return await res.text(); } catch { return ""; }

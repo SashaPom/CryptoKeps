@@ -12,8 +12,8 @@ function normBool(x: any, d = false) {
 function normStr(x: any, d = "") {
     return typeof x === "string" ? x : d;
 }
+
 function mapProfile(raw: any): TwProfile {
-    // exchange может прийти как 0/1 — быстренько мапнем
     const ex = raw.exchange;
     const exchange =
         typeof ex === "number"
@@ -23,7 +23,7 @@ function mapProfile(raw: any): TwProfile {
             : normStr(ex, "BINANCE");
 
     const status: "running" | "stopped" =
-        raw.server || raw.is_started ? "running" : "stopped";
+        raw.server || raw.server_id ? "running" : "stopped";
 
     return {
         id: raw.id,
@@ -48,16 +48,27 @@ function mapProfile(raw: any): TwProfile {
     };
 }
 
-
 export const TwApi = {
-    listProfiles: () => api<TwProfile[]>("/api/py/dj/tw/api/watcher/profiles/?all=1"),
+    listProfiles: () =>
+        api<TwProfile[]>("/api/py/dj/tw/api/watcher/profiles/?all=1")
+           .then(arr => Array.isArray(arr) ? arr.map(mapProfile) : []),
+
 
     create: (payload: TwCreatePayload) =>
-        api<{ id: number }>("/py/dj/tw/create/", { method: "POST", body: JSON.stringify(payload) }),
+        api<{ id: number }>("/api/py/dj/tw/api/profile/create", {
+            method: "POST",
+            body: JSON.stringify(payload),
+        }),
 
     start: (id: number) =>
-        api<{ ok: true }>("/py/dj/tw/start/", { method: "POST", body: JSON.stringify({ id }) }),
+        api<{ ok: true }>("/api/py/dj/tw/api/profile/start", {
+            method: "POST",
+            body: JSON.stringify({ id }),
+        }),
 
     stop: (id: number) =>
-        api<{ ok: true }>("/py/dj/tw/stop/", { method: "POST", body: JSON.stringify({ id }) }),
+        api<{ ok: true }>("/api/py/dj/tw/api/profile/stop", {
+            method: "POST",
+            body: JSON.stringify({ id }),
+        }),
 };

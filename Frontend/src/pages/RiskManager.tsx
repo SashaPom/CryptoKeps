@@ -24,14 +24,9 @@ export default function RiskManager() {
     const [error, setError] = useState<string | null>(null);
     const [creating, setCreating] = useState(false);
 
-    const wsOkxUrl = useMemo(
-        () => `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws/okx`,
-        []
-    );
-    const wsBinUrl = useMemo(
-        () => `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws/binance`,
-        []
-    );
+    const wsOkxUrl = useMemo(() => `ws://${location.hostname}:8080/ws/okx`, []);
+    const wsBinUrl = useMemo(() => `ws://${location.hostname}:8080/ws/binance`, []);
+
 
     useEffect(() => {
         if (DEMO_MODE) {
@@ -39,6 +34,9 @@ export default function RiskManager() {
             return;
         }
         refresh();
+
+        // const t = setInterval(refresh, 10000); // обновляем каждые 10 сек
+        // return () => clearInterval(t);
 
         // подписки на вотчеры (если присылают обновлённые профили)
         const okx = new WebSocket(wsOkxUrl);

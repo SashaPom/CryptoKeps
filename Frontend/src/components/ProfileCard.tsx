@@ -9,17 +9,22 @@ function fmtMoney(n?: number | null) {
 function yesNo(b?: boolean | null) {
     return b ? "YES" : "NO";
 }
-function exTitle(ex?: string) {
-    return (ex ?? "").toUpperCase() === "OKX" ? "OKX" : "BINANCE";
+function exTitle(ex?: string | number | null) {
+    if (typeof ex === "number") {
+        return ex === 1 ? "OKX" : "BINANCE";
+    }
+    const s = String(ex ?? "").trim().toUpperCase();
+    return s === "OKX" ? "OKX" : "BINANCE";
 }
+
 function formatDate(s?: string | null) {
     if (!s) return "-";
     const d = new Date(s);
-    if (Number.isNaN(d.getTime())) return s; // уже человекочитаемая строка
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    if (Number.isNaN(d.getTime())) return s;
     const dd = String(d.getDate()).padStart(2, "0");
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
     const yyyy = d.getFullYear();
-    return `${mm}.${dd}.${yyyy}`;
+    return `${dd}.${mm}.${yyyy}`;
 }
 
 /* ---------- component ---------- */

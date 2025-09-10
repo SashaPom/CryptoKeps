@@ -1,80 +1,138 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef, useCallback } from "react";
 import { TwApi } from "../api/tw";
 import type { TwCreatePayload, TwProfile } from "../types/tw";
 import ProfileCard from "../components/ProfileCard";
 
-/** Включи DEMO_MODE=true если нужен локальный демо-рендер без бэка */
-const DEMO_MODE = false;
-
-const demoProfiles: TwProfile[] = [
-    { id: 101, name: "OKX Alpha", exchange: "OKX", status: "running",
-        available_balance: 0, balance: 0, max_balance: 0, pnl: 0,
-        lose_streak: 0, trade_now: false, blocked: false,
-        refresh_time: "09:00", lose_amount_limit: 10, lose_percent_limit: 5,
-        lose_streak_limit: 5, created_at: "2025-08-28" },
-    { id: 102, name: "Binance Demo", exchange: "BINANCE", status: "stopped",
-        available_balance: 0, balance: 0, max_balance: 0, pnl: 0,
-        lose_streak: 0, trade_now: false, blocked: true,
-        refresh_time: "09:00", lose_amount_limit: 10, lose_percent_limit: 5,
-        lose_streak_limit: 5, created_at: "2025-08-28" },
-];
 
 export default function RiskManager() {
     const [profiles, setProfiles] = useState<TwProfile[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [creating, setCreating] = useState(false);
 
-    const wsOkxUrl = useMemo(() => `ws://${location.hostname}:8080/ws/okx`, []);
-    const wsBinUrl = useMemo(() => `ws://${location.hostname}:8080/ws/binance`, []);
+    const okxRef = useRef<WebSocket | null>(null);
+    const binRef = useRef<WebSocket | null>(null);
 
+    function safeSend(ws: WebSocket | null | undefined, msg: string) {
+        if (ws && ws.readyState === WebSocket.OPEN) ws.send(msg);
+    }
+
+    const handleWsMessage = useCallback((ev: MessageEvent) => {
+        try {
+            console.log(ev.data)
+            const data = JSON.parse(ev.data as string);
+            if (Array.isArray(data)) {
+                setProfiles((prev) =>
+                    prev.map((p) => {
+                        const upd = (data as any[]).find((row: any[]) => row && row[0] === p.id);
+                        if (!upd) return p;
+                        const [_id, balance, max_balance, available_balance, pnl, is_blocked, is_trade_now, lose_streak] = upd;
+                        return {
+                            ...p,
+                            balance: Number(balance ?? p.balance ?? 0),
+                            max_balance: Number(max_balance ?? p.max_balance ?? 0),
+                            available_balance: Number(available_balance ?? p.available_balance ?? 0),
+                            pnl: Number(pnl ?? p.pnl ?? 0),
+                            blocked: Boolean(is_blocked),
+                            trade_now: Boolean(is_trade_now),
+                            lose_streak: Number(lose_streak ?? p.lose_streak ?? 0),
+                        };
+                    })
+                );
+            } else if (data && (data as any).profiles) {
+                setProfiles((data as any).profiles);
+            }
+        } catch {}
+    }, []);
 
     useEffect(() => {
-        if (DEMO_MODE) {
-            setProfiles(demoProfiles);
-            return;
-        }
         refresh();
 
-        // const t = setInterval(refresh, 10000); // обновляем каждые 10 сек
-        // return () => clearInterval(t);
+        const wsProto = location.protocol === "https:" ? "wss" : "ws";
+        const okxUrl  = `${wsProto}://${location.host}/ws/okx/`;
+        const binUrl  = `${wsProto}://${location.host}/ws/binance/`;
 
-        // подписки на вотчеры (если присылают обновлённые профили)
-        const okx = new WebSocket(wsOkxUrl);
-        okx.onmessage = (e) => {
-            try {
-                const data = JSON.parse(e.data);
-                if (data?.profiles) setProfiles(data.profiles);
-            } catch {}
+        const okx = new WebSocket(okxUrl) as WebSocket;
+        const bin = new WebSocket(binUrl) as WebSocket;
+
+        okxRef.current = okx;
+        binRef.current = bin;
+
+        const subscribeAll = (sock: WebSocket, list: TwProfile[]) => {
+            const okxIds = list
+                .filter((p) => (p.exchange === "OKX" || p.exchange === 1) && p.status === "running")
+                .map((p) => p.id);
+            const binIds = list
+                .filter((p) => (p.exchange === "BINANCE" || p.exchange === 0) && p.status === "running")
+                .map((p) => p.id);
+            if (sock === okx && okxIds.length) safeSend(okx, okxIds.join("."));
+            if (sock === bin && binIds.length) safeSend(bin, binIds.join("."));
         };
 
-        const bin = new WebSocket(wsBinUrl);
-        bin.onmessage = (e) => {
-            try {
-                const data = JSON.parse(e.data);
-                if (data?.profiles) setProfiles(data.profiles);
-            } catch {}
-        };
+        const onOkxOpen = () => subscribeAll(okx, profiles);
+        const onBinOpen = () => subscribeAll(bin, profiles);
+
+        okx.addEventListener("open", onOkxOpen);
+        bin.addEventListener("open", onBinOpen);
+
+        okx.addEventListener("message", handleWsMessage as unknown as EventListener);
+        bin.addEventListener("message", handleWsMessage as unknown as EventListener);
 
         return () => {
-            okx.close();
-            bin.close();
+            try {
+                okx.removeEventListener("open", onOkxOpen);
+                okx.removeEventListener("message", handleWsMessage as unknown as EventListener);
+                okx.close();
+            } catch {}
+            try {
+                bin.removeEventListener("open", onBinOpen);
+                bin.removeEventListener("message", handleWsMessage as unknown as EventListener);
+                bin.close();
+            } catch {}
+            okxRef.current = null;
+            binRef.current = null;
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+// 2. Отдельный useEffect, который реагирует на обновление profiles
+    useEffect(() => {
+        if (binRef.current?.readyState === WebSocket.OPEN) {
+            const binIds = profiles
+                .filter((p) => (p.exchange === "BINANCE" || p.exchange === 0) && p.status === "running")
+                .map((p) => p.id);
+            if (binIds.length) safeSend(binRef.current, binIds.join("."));
+        }
+        if (okxRef.current?.readyState === WebSocket.OPEN) {
+            const okxIds = profiles
+                .filter((p) => (p.exchange === "OKX" || p.exchange === 1) && p.status === "running")
+                .map((p) => p.id);
+            if (okxIds.length) safeSend(okxRef.current, okxIds.join("."));
+        }
+    }, [profiles]);
+
     function refresh() {
         setError(null);
-        TwApi.listProfiles()
-            .then(setProfiles)
-            .catch((err) => setError(err.message || String(err)));
+        TwApi.listProfiles().then(setProfiles).catch((err) => setError(err.message || String(err)));
     }
 
     function start(id: number) {
-        TwApi.start(id).then(refresh).catch((e) => setError(String(e)));
+        TwApi.start(id)
+            .then(() => {
+                refresh();
+                safeSend(okxRef.current, "update");
+                safeSend(binRef.current, "update");
+            })
+            .catch((e) => setError(String(e)));
     }
 
     function stop(id: number) {
-        TwApi.stop(id).then(refresh).catch((e) => setError(String(e)));
+        TwApi.stop(id)
+            .then(() => {
+                refresh();
+                safeSend(okxRef.current, "update");
+                safeSend(binRef.current, "update");
+            })
+            .catch((e) => setError(String(e)));
     }
 
     return (
@@ -97,9 +155,7 @@ export default function RiskManager() {
                 ))}
             </div>
 
-            {profiles.length === 0 && !error && (
-                <div className="text-gray-500">Нет профилей</div>
-            )}
+            {profiles.length === 0 && !error && <div className="text-gray-500">Нет профилей</div>}
 
             {creating && (
                 <CreateProfileModal
@@ -115,7 +171,6 @@ export default function RiskManager() {
     );
 }
 
-/* ---------- Create modal (без изменений) ---------- */
 function CreateProfileModal({
                                 onClose,
                                 onCreated,
@@ -199,11 +254,7 @@ function CreateProfileModal({
                     </L>
 
                     <L label="Secret key">
-                        <input
-                            className="input"
-                            value={form.secret_key}
-                            onChange={(e) => update("secret_key", e.target.value)}
-                        />
+                        <input className="input" value={form.secret_key} onChange={(e) => update("secret_key", e.target.value)} />
                     </L>
 
                     <L label="Passphrase (если требуется)">

@@ -30,7 +30,7 @@ spring:
         - id: watcher-okx
           uri: ws://watcher-okx:8889
           predicates:
-            - Path=/ws/okx/**
+            - Path=/ws/okx,/ws/okx/**
           filters:
             - StripPrefix=2
 #            - name: BasicAuth
@@ -41,7 +41,7 @@ spring:
         - id: watcher-binance
           uri: ws://watcher-binance:8890
           predicates:
-            - Path=/ws/binance/**
+            - Path=/ws/binance,/ws/binance/**
           filters:
             - StripPrefix=2
 #            - name: BasicAuth

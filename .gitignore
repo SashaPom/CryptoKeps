@@ -4,6 +4,8 @@
 .DS_Store
 target/
 .env
+.env.*
+!example.env
 Frontend/node_modules/*
 
 # Log file

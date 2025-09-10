@@ -4,18 +4,18 @@ services:
     image: postgres:17
     env_file:
       - ../.env
-    environment:
-      POSTGRES_DB: ck
-    ports:
-      - "${CK_DB_PORT:-5432}:5432"
+      - ../../tw_m_main/.env
+    expose: ["5432"]
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./initdb/00-init.sql:/docker-entrypoint-initdb.d/00-init.sql:ro
+      - ./initdb/00-init.sh:/docker-entrypoint-initdb.d/00-init.sh:ro
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U $$CK_DB_USER -d $$CK_DB_NAME" ]
       interval: 5s
       timeout: 5s
       retries: 5
+    networks: [ appnet ]
+
 
   # Java backend
   java:
@@ -28,48 +28,55 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    expose:
-      - "8080"
+    expose: ["8080"]
     volumes:
       - ../logs:/app/logs
       - ../config:/app/config
-    # ports:
-    #   - "8080:8080"          # локально НЕ обязательно, gateway ходит по сети docker
+    networks: [ appnet ]
+
 
   # Django API
   django:
-    build: ../../tw-m-main
+    build: ../../tw_m_main
     env_file:
-      - ../../tw-m-main/.env
+      - ../../tw_m_main/.env
     depends_on:
       postgres:
         condition: service_healthy
     # image: yourorg/django:prod
     expose: ["8001"]
+    networks: [ appnet ]
+
 
   # Watcher OKX
   watcher-okx:
-    build: ../../tw-main
-    env_file: ../../tw-main/.env.okx
-    ports: ["8889:8889"]                         # публикуем наружу для теста; в проде можно убрать
+    build: ../../tw_main
+    env_file: ../../tw_main/.env.okx
+    depends_on: [gateway]
+    expose: ["8889"]
     # environment:
       # SSL для продакшена:
       # SSL_CERTFILE: /etc/letsencrypt/live/cryptokeps.com/fullchain.pem
       # SSL_KEYFILE:  /etc/letsencrypt/live/cryptokeps.com/privkey.pem
     # volumes:
     #   - /etc/letsencrypt:/etc/letsencrypt:ro   # включить в проде
+    networks: [ appnet ]
+
 
   # Watcher Binance
   watcher-binance:
-    build: ../../tw-main
-    env_file: ../../tw-main/.env.binance
-    ports: ["8890:8890"]
+    build: ../../tw_main
+    env_file: ../../tw_main/.env.binance
+    depends_on: [gateway]
+    expose: ["8890"]
 #    environment:
       # SSL для продакшена:
       # SSL_CERTFILE: /etc/letsencrypt/live/cryptokeps.com/fullchain.pem
       # SSL_KEYFILE:  /etc/letsencrypt/live/cryptokeps.com/privkey.pem
     # volumes:
     #   - /etc/letsencrypt:/etc/letsencrypt:ro
+    networks: [ appnet ]
+
 
   # Gateway (UI ходит сюда на /api/** и /ws/**)
   gateway:
@@ -80,11 +87,12 @@ services:
       - ../.env
     # image: yourorg/gateway:prod
     ports: ["8080:8080"]
-    depends_on: [django, java, watcher-okx, watcher-binance]
+    depends_on: [django, java]
+    networks: [ appnet ]
+
 
 networks:
-  default:
-    name: appnet
+  appnet: {}
 
 volumes:
   postgres-data:

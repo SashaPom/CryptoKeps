@@ -39,6 +39,18 @@ export const TwApi = {
             body: JSON.stringify(payload),
         }),
 
+    update: (id: number, payload: Partial<TwCreatePayload>) =>
+        api<{ ok: true }>("/api/py/dj/tw/api/profile/update", {
+            method: "POST",
+            body: JSON.stringify({ id, ...payload }),
+        }),
+
+    delete: (id: number) =>
+        api<{ ok: true }>("/api/py/dj/tw/api/profile/delete", {
+            method: "POST",
+            body: JSON.stringify({ id }),
+        }),
+
     start: (id: number) =>
         api<{ ok: true }>("/api/py/dj/tw/api/profile/start", {
             method: "POST",

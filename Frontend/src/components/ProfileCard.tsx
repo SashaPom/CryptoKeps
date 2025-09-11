@@ -32,10 +32,14 @@ export default function ProfileCard({
                                         p,
                                         onStart,
                                         onStop,
+                                        onEdit,
+                                        onDelete,
                                     }: {
     p: TwProfile;
     onStart: (id: number) => void;
     onStop: (id: number) => void;
+    onEdit: (p: TwProfile) => void;
+    onDelete: (p: TwProfile) => void;
 }) {
     // только клик по INFO переключает режим
     const [showInfo, setShowInfo] = useState(false);
@@ -72,8 +76,21 @@ export default function ProfileCard({
                     >
                         INFO
                     </button>
+                    <button
+                        className="text-blue-700 underline underline-offset-4 text-sm"
+                        onClick={() => onEdit(p)}
+                    >
+                        EDIT
+                    </button>
+                    <button
+                        className="text-red-700 underline underline-offset-4 text-sm"
+                        onClick={() => onDelete(p)}
+                    >
+                        DELETE
+                    </button>
                 </div>
             </div>
+
 
             {/* Фиксированная по высоте область контента: карточка не прыгает */}
             <div className="relative min-h-[220px] sm:min-h-[200px]">

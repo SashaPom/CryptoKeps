@@ -32,3 +32,13 @@ export type TwProfile = {
     lose_streak_limit?: number | null;
     created_at?: string | null;           // "YYYY-MM-DD" или "MM.DD.YYYY"
 };
+
+export type LiveRow = {
+    balance: number;
+    max_balance: number;
+    available_balance: number;
+    pnl: number;
+    blocked: boolean;
+    trade_now: boolean;
+    lose_streak: number;
+};

@@ -1,10 +1,12 @@
-import React, {useEffect, useMemo, useState, useRef, useCallback} from "react";
+import React, {useEffect, useMemo, useRef, useState, useCallback} from "react";
 import {TwApi} from "../api/tw";
-import type {TwCreatePayload, TwProfile} from "../types/tw";
+import type {TwCreatePayload, TwProfile, LiveRow} from "../types/tw";
 import ProfileCard from "../components/ProfileCard";
 
 export default function RiskManager() {
     const [profiles, setProfiles] = useState<TwProfile[]>([]);
+    const [live, setLive] = useState<Record<number, LiveRow>>({});
+
     const [error, setError] = useState<string | null>(null);
     const [creating, setCreating] = useState(false);
     const [editing, setEditing] = useState<TwProfile | null>(null);
@@ -17,68 +19,52 @@ export default function RiskManager() {
         const proto = location.protocol === "https:" ? "wss" : "ws";
         return `${proto}://${location.host}`;
     }, []);
-
     const okxUrl = `${wsBase}/ws/okx/`;
     const binUrl = `${wsBase}/ws/binance/`;
 
-    function safeSend(ws: WebSocket | null | undefined, msg: string) {
+    const safeSend = (ws: WebSocket | null | undefined, msg: string) => {
         if (ws && ws.readyState === WebSocket.OPEN) ws.send(msg);
-    }
+    };
 
     const okxSig = useMemo(
-        () =>
-            profiles
-                .filter(p => (p.exchange === "OKX" || p.exchange === 1) && p.status === "running")
-                .map(p => p.id)
-                .sort((a, b) => a - b)
-                .join("."),
+        () => profiles.filter(p => (p.exchange === "OKX" || (p as any).exchange === 1) && p.status === "running")
+            .map(p => p.id).sort((a, b) => a - b).join("."),
         [profiles]
     );
     const binSig = useMemo(
-        () =>
-            profiles
-                .filter(p => (p.exchange === "BINANCE" || p.exchange === 0) && p.status === "running")
-                .map(p => p.id)
-                .sort((a, b) => a - b)
-                .join("."),
+        () => profiles.filter(p => (p.exchange === "BINANCE" || (p as any).exchange === 0) && p.status === "running")
+            .map(p => p.id).sort((a, b) => a - b).join("."),
         [profiles]
     );
 
-    const pending = useRef<Map<number, any[]>>(new Map());
-    const flushTimer = useRef<number | null>(null);
-
     const handleWsMessage = useCallback((ev: MessageEvent) => {
+        console.log("WS message", ev.data);
+
+        let payload: any;
         try {
-            const data = JSON.parse(ev.data as string);
-            if (!Array.isArray(data)) return;
-
-            for (const row of data as any[]) pending.current.set(row[0], row);
-
-            if (flushTimer.current == null) {
-                flushTimer.current = window.setTimeout(() => {
-                    setProfiles((prev) =>
-                        prev.map((p) => {
-                            const upd = (data as any[]).find((row: any[]) => row && row[0] === p.id);
-                            if (!upd) return p;
-                            const [_id, balance, max_balance, available_balance, pnl, is_blocked, is_trade_now, lose_streak] = upd;
-                            return {
-                                ...p,
-                                balance: Number(balance ?? p.balance ?? 0),
-                                max_balance: Number(max_balance ?? p.max_balance ?? 0),
-                                available_balance: Number(available_balance ?? p.available_balance ?? 0),
-                                pnl: Number(pnl ?? p.pnl ?? 0),
-                                blocked: Boolean(is_blocked),
-                                trade_now: Boolean(is_trade_now),
-                                lose_streak: Number(lose_streak ?? p.lose_streak ?? 0),
-                            };
-                        })
-                    );
-                    pending.current.clear();
-                    flushTimer.current = null;
-                }, 300);
-            }
+            payload = JSON.parse(ev.data as string);
         } catch {
+            return;
         }
+        if (!Array.isArray(payload)) return;
+
+        setLive(prev => {
+            const next = { ...prev };
+            for (const row of payload) {
+                const [id, balance, max_balance, available_balance, pnl, is_blocked, is_trade_now, lose_streak] = row;
+                next[id] = {
+                    balance: Number(balance) || 0,
+                    max_balance: Number(max_balance) || 0,
+                    available_balance: Number(available_balance) || 0,
+                    pnl: Number(pnl) || 0,
+                    blocked: Boolean(is_blocked),
+                    trade_now: Boolean(is_trade_now),
+                    lose_streak: Number(lose_streak) || 0,
+                };
+            }
+            return next;
+        });
+
     }, []);
 
     useEffect(() => {
@@ -86,25 +72,24 @@ export default function RiskManager() {
 
         const okx = new WebSocket(okxUrl) as WebSocket;
         const bin = new WebSocket(binUrl) as WebSocket;
-
         okxRef.current = okx;
         binRef.current = bin;
+
+        const subOkx = () => { if (okxSig) safeSend(okx, okxSig); };
+        const subBin = () => { if (binSig) safeSend(bin, binSig); };
+
+        okx.addEventListener("open", subOkx);
+        bin.addEventListener("open", subBin);
 
         okx.addEventListener("message", handleWsMessage as unknown as EventListener);
         bin.addEventListener("message", handleWsMessage as unknown as EventListener);
 
         return () => {
-            try {
-                okx.removeEventListener("message", handleWsMessage as unknown as EventListener);
-                okx.close();
-            } catch {}
-            try {
-                bin.removeEventListener("message", handleWsMessage as unknown as EventListener);
-                bin.close();
-            } catch {}
-            okxRef.current = null;
-            binRef.current = null;
+            try { okx.removeEventListener("open", subOkx); okx.removeEventListener("message", handleWsMessage as unknown as EventListener); okx.close(); } catch {}
+            try { bin.removeEventListener("open", subBin); bin.removeEventListener("message", handleWsMessage as unknown as EventListener); bin.close(); } catch {}
+            okxRef.current = null; binRef.current = null;
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [okxUrl, binUrl, handleWsMessage]);
 
     useEffect(() => {
@@ -114,36 +99,58 @@ export default function RiskManager() {
         if (binRef.current?.readyState === WebSocket.OPEN && binSig) safeSend(binRef.current, binSig);
     }, [binSig]);
 
-    function refresh() {
-        setError(null);
-        TwApi.listProfiles().then(setProfiles).catch((err) => setError(err.message || String(err)));
-    }
 
-    function update(id: number, payload: Partial<TwCreatePayload>) {
-        TwApi.update(id, payload)
-            .then(() => refresh())
-            .catch((e) => setError(String(e)));
-    }
+    const refresh = () => {
+        setError(null);
+        TwApi.listProfiles()
+            .then(rows => {
+                setProfiles(rows);
+            })
+            .catch(err => setError(err.message || String(err)));
+    };
+    useEffect(() => { refresh(); }, []);
 
     function start(id: number) {
         TwApi.start(id)
             .then(() => {
-                refresh();
+                setProfiles(prev => prev.map(p => p.id === id ? { ...p, status: "running" } : p));
                 safeSend(okxRef.current, "update");
                 safeSend(binRef.current, "update");
+                refresh();
             })
-            .catch((e) => setError(String(e)));
+            .catch(e => setError(String(e)));
     }
 
     function stop(id: number) {
         TwApi.stop(id)
             .then(() => {
-                refresh();
+                setProfiles(prev => prev.map(p => p.id === id ? { ...p, status: "stopped" } : p));
+                setLive(prev => {
+                    const { [id]: _, ...rest } = prev;
+                    return rest;
+                });
                 safeSend(okxRef.current, "update");
                 safeSend(binRef.current, "update");
+                refresh();
             })
-            .catch((e) => setError(String(e)));
+            .catch(e => setError(String(e)));
     }
+
+    const viewProfiles = useMemo(() => {
+        return profiles.map(p => {
+            const l = live[p.id];
+            return l ? {
+                ...p,
+                balance: l.balance,
+                max_balance: l.max_balance,
+                available_balance: l.available_balance,
+                pnl: l.pnl,
+                blocked: l.blocked,
+                trade_now: l.trade_now,
+                lose_streak: l.lose_streak,
+            } : p;
+        });
+    }, [profiles, live]);
 
     return (
         <div className="p-6 space-y-4">
@@ -160,7 +167,7 @@ export default function RiskManager() {
             {error && <div className="text-red-500">{error}</div>}
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {profiles.map((p) => (
+                {viewProfiles.map((p) => (
                     <ProfileCard
                         key={p.id}
                         p={p}
@@ -213,7 +220,7 @@ export default function RiskManager() {
 }
 
 /* ---------- CREATE ---------- */
-function CreateProfileModal({ onClose, onCreated, onError }: {
+function CreateProfileModal({onClose, onCreated, onError}: {
     onClose: () => void; onCreated: () => void; onError: (msg: string) => void;
 }) {
     const [form, setForm] = useState<TwCreatePayload>({
@@ -230,7 +237,7 @@ function CreateProfileModal({ onClose, onCreated, onError }: {
     const [submitting, setSubmitting] = useState(false);
 
     function update<K extends keyof TwCreatePayload>(k: K, v: TwCreatePayload[K]) {
-        setForm((s) => ({ ...s, [k]: v }));
+        setForm((s) => ({...s, [k]: v}));
     }
 
     async function submit() {
@@ -251,7 +258,7 @@ function CreateProfileModal({ onClose, onCreated, onError }: {
 
     return (
         <Modal title="Create TW profile" onClose={onClose}>
-            <ProfileForm form={form} update={update} />
+            <ProfileForm form={form} update={update}/>
             <div className="flex justify-end gap-2">
                 <button className="px-3 py-2 rounded-xl border" onClick={onClose} disabled={submitting}>Cancel</button>
                 <button
@@ -267,14 +274,14 @@ function CreateProfileModal({ onClose, onCreated, onError }: {
 }
 
 /* ---------- EDIT ---------- */
-function EditProfileModal({ profile, onClose, onSaved, onError }: {
+function EditProfileModal({profile, onClose, onSaved, onError}: {
     profile: TwProfile; onClose: () => void; onSaved: () => void; onError: (msg: string) => void;
 }) {
-    const [form, setForm] = useState<Partial<TwCreatePayload>>({ ...profile } as Partial<TwCreatePayload>);
+    const [form, setForm] = useState<Partial<TwCreatePayload>>({...profile} as Partial<TwCreatePayload>);
     const [submitting, setSubmitting] = useState(false);
 
     function update<K extends keyof TwCreatePayload>(k: K, v: TwCreatePayload[K]) {
-        setForm((s) => ({ ...s, [k]: v }));
+        setForm((s) => ({...s, [k]: v}));
     }
 
     async function submit() {
@@ -291,7 +298,7 @@ function EditProfileModal({ profile, onClose, onSaved, onError }: {
 
     return (
         <Modal title={`Edit ${profile.name}`} onClose={onClose}>
-            <ProfileForm form={form} update={update} />
+            <ProfileForm form={form} update={update}/>
             <div className="flex justify-end gap-2">
                 <button className="px-3 py-2 rounded-xl border" onClick={onClose} disabled={submitting}>Cancel</button>
                 <button
@@ -307,7 +314,7 @@ function EditProfileModal({ profile, onClose, onSaved, onError }: {
 }
 
 /* ---------- DELETE ---------- */
-function DeleteProfileModal({ profile, onClose, onDeleted, onError }: {
+function DeleteProfileModal({profile, onClose, onDeleted, onError}: {
     profile: TwProfile; onClose: () => void; onDeleted: () => void; onError: (msg: string) => void;
 }) {
     const [submitting, setSubmitting] = useState(false);
@@ -342,29 +349,38 @@ function DeleteProfileModal({ profile, onClose, onDeleted, onError }: {
 }
 
 /* ---------- SHARED FORM ---------- */
-function ProfileForm({ form, update }: { form: any; update: (k: keyof TwCreatePayload, v: any) => void }) {
+function ProfileForm({form, update}: { form: any; update: (k: keyof TwCreatePayload, v: any) => void }) {
     return (
         <div className="grid grid-cols-2 gap-4">
-            <L label="Name"><input className="input" value={form.name ?? ""} onChange={(e) => update("name", e.target.value)} /></L>
+            <L label="Name"><input className="input" value={form.name ?? ""}
+                                   onChange={(e) => update("name", e.target.value)}/></L>
             <L label="Exchange">
-                <select className="input" value={form.exchange ?? "OKX"} onChange={(e) => update("exchange", e.target.value as any)}>
+                <select className="input" value={form.exchange ?? "OKX"}
+                        onChange={(e) => update("exchange", e.target.value as any)}>
                     <option value="OKX">OKX</option>
                     <option value="BINANCE">Binance</option>
                 </select>
             </L>
-            <L label="API key"><input className="input" value={form.api_key ?? ""} onChange={(e) => update("api_key", e.target.value)} /></L>
-            <L label="Secret key"><input className="input" value={form.secret_key ?? ""} onChange={(e) => update("secret_key", e.target.value)} /></L>
-            <L label="Passphrase"><input className="input" value={form.passphrase ?? ""} onChange={(e) => update("passphrase", e.target.value)} /></L>
-            <L label="Refresh time"><input className="input" value={form.refresh_time ?? ""} onChange={(e) => update("refresh_time", e.target.value)} /></L>
-            <L label="Lose % limit"><input type="number" className="input" value={form.lose_percent_limit ?? ""} onChange={(e) => update("lose_percent_limit", e.target.value === "" ? null : Number(e.target.value))} /></L>
-            <L label="Lose streak limit"><input type="number" className="input" value={form.lose_streak_limit ?? ""} onChange={(e) => update("lose_streak_limit", e.target.value === "" ? null : Number(e.target.value))} /></L>
-            <L label="Lose amount limit"><input type="number" className="input" value={form.lose_amount_limit ?? ""} onChange={(e) => update("lose_amount_limit", e.target.value === "" ? null : Number(e.target.value))} /></L>
+            <L label="API key"><input className="input" value={form.api_key ?? ""}
+                                      onChange={(e) => update("api_key", e.target.value)}/></L>
+            <L label="Secret key"><input className="input" value={form.secret_key ?? ""}
+                                         onChange={(e) => update("secret_key", e.target.value)}/></L>
+            <L label="Passphrase"><input className="input" value={form.passphrase ?? ""}
+                                         onChange={(e) => update("passphrase", e.target.value)}/></L>
+            <L label="Refresh time"><input className="input" value={form.refresh_time ?? ""}
+                                           onChange={(e) => update("refresh_time", e.target.value)}/></L>
+            <L label="Lose % limit"><input type="number" className="input" value={form.lose_percent_limit ?? ""}
+                                           onChange={(e) => update("lose_percent_limit", e.target.value === "" ? null : Number(e.target.value))}/></L>
+            <L label="Lose streak limit"><input type="number" className="input" value={form.lose_streak_limit ?? ""}
+                                                onChange={(e) => update("lose_streak_limit", e.target.value === "" ? null : Number(e.target.value))}/></L>
+            <L label="Lose amount limit"><input type="number" className="input" value={form.lose_amount_limit ?? ""}
+                                                onChange={(e) => update("lose_amount_limit", e.target.value === "" ? null : Number(e.target.value))}/></L>
         </div>
     );
 }
 
 /* ---------- REUSABLE MODAL ---------- */
-function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
+function Modal({title, onClose, children}: { title: string; onClose: () => void; children: React.ReactNode }) {
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="w-full max-w-xl rounded-2xl bg-white p-5 space-y-4">

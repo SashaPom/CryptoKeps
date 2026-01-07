@@ -1,71 +1,177 @@
-Project Documentation
-======================
+# Trading Dashboard (Java Bot API + React UI)
 
-*** Module 1: Bybit API ***
+> **Part of a 3-repository system.**  
+> This repository contains the **Java (Spring Boot) trading service** + **React (TypeScript) frontend**.  
+> The whole system is intended to be started **together via Docker Compose** from the `infra/` directory (in the infrastructure repo / infra folder of the project).  
+>
+> ✅ You *can* run services separately for development, but for “everything works end-to-end” you use **docker-compose in `infra/`**.
 
-1. **com.trading.bybit_api.service.impl.BybitBalanceServiceImpl**
-    - **Fields:**
-        - `BybitApiAccountRestClient getRestClient(String apiKey, String apiSecret)`: Creates and returns a Bybit API account REST client using the provided API key and secret.
-        - `BigDecimal SAFETY_MARGIN`: A constant representing a 1% safety margin.
+---
 
-    - **Methods:**
-        - `List<BalanceDto> fetchBalances(String apiKey, String apiSecret)`: Fetches the current account balances from Bybit for the given API key and secret. Returns a list of `BalanceDto` objects.
-        - `BigDecimal getTotalAvailableBalance(String coin, String apiKey, String apiSecret)`: Retrieves the total available balance for a specific coin using the provided API key and secret. Returns the available balance as a `BigDecimal`.
-        - `boolean hasEnoughBalance(String coin, BigDecimal requiredAmount, String apiKey, String apiSecret)`: Checks if there is enough balance for a specific coin to meet the required amount. Returns a boolean indicating the result.
-        - `BigDecimal getTotalEquity(String apiKey, String apiSecret)`: Calculates the total equity of the account in USD using the provided API key and secret. Returns the total equity as a `BigDecimal`.
-        - `BigDecimal getUnrealizedPnl(String coin, String apiKey, String apiSecret)`: Retrieves the unrealized profit and loss (PnL) for a specific coin using the provided API key and secret. Returns the unrealized PnL as a `BigDecimal`.
-        - `BalanceDto extractBalanceFromResponse(Map<String, Object> response, String targetCoin)`: Extracts balance information for a specific coin from the API response. Returns a `BalanceDto` object.
+## Suggested new repository names (rename ideas)
 
-2. **com.trading.bybit_api.service.IBybitBalanceService**
-    - **Methods:**
-        - `List<BalanceDto> fetchBalances(String apiKey, String apiSecret)`: Fetches the current account balances from Bybit for the given API key and secret. Returns a list of `BalanceDto` objects.
-        - `BigDecimal getTotalAvailableBalance(String coin, String apiKey, String apiSecret)`: Retrieves the total available balance for a specific coin using the provided API key and secret. Returns the available balance as a `BigDecimal`.
-        - `boolean hasEnoughBalance(String coin, BigDecimal requiredAmount, String apiKey, String apiSecret)`: Checks if there is enough balance for a specific coin to meet the required amount. Returns a boolean indicating the result.
-        - `BigDecimal getTotalEquity(String apiKey, String apiSecret)`: Calculates the total equity of the account in USD using the provided API key and secret. Returns the total equity as a `BigDecimal`.
+Since you want to remove the old naming:
 
-3. **com.trading.bybit_api.dto.BalanceDto**
-    - **Fields:**
-        - `String symbol`: The name of the coin, e.g., USDT.
-        - `BigDecimal availableBalance`: The available balance of the coin.
-        - `BigDecimal totalBalance`: The total balance of the coin.
-        - `BigDecimal unrealizedPnl`: The unrealized profit and loss of the coin.
+### Neutral / product-like
+- `trading-dashboard`
+- `trading-control-center`
+- `trade-console`
+- `trading-suite`
+- `trading-platform-ui`
 
-4. **com.trading.bybit_api.config.connection.BybitAccountConnector**
-    - **Fields:**
-        - `BybitApiAccountRestClient apiRestClient`: The Bybit API account REST client.
-        - `BybitApiTradeRestClient tradeRestClient`: The Bybit API trade REST client.
-        - `BybitApiMarketRestClient marketRestClient`: The Bybit API market REST client.
-        - `BybitApiPositionRestClient positionRestClient`: The Bybit API position REST client.
+### More “dev/tech” style
+- `trade-hub`
+- `trade-gateway-ui`
+- `bot-console`
+- `trading-ops`
 
-    - **Constructor:**
-        - `BybitAccountConnector(String apiKey, String apiSecret)`: Initializes the connector with the provided API key and secret. Creates instances of the REST clients.
+**My pick:** `trading-dashboard` (clear: UI + API for bots).
 
-5. **com.trading.bybit_api.controller.AccountInfoController**
-    - **Fields:**
-        - `IBybitAccountInfoService accountInfoService`: The service for handling account information.
+---
 
-    - **Methods:**
-        - `AccountInfoDto getAccountInfo(@PathVariable Long id)`: Retrieves account information by ID. Returns an `AccountInfoDto` object.
-        - `AccountInfoDto createAccountInfo(@RequestBody AccountInfo accountInfo)`: Creates a new account information entry. Returns an `AccountInfoDto` object.
-        - `AccountInfoDto updateAccountInfo(@PathVariable Long id, @RequestBody AccountInfo accountInfo)`: Updates existing account information by ID. Returns an `AccountInfoDto` object.
-        - `void deleteAccountInfo(@PathVariable Long id)`: Deletes account information by ID.
+## What this repo contains
 
-6. **com.trading.bybit_api.repository.AccountInfoRepository**
-    - **Methods:**
-        - `Optional<AccountInfo> findById(Long id)`: Finds an account information entry by its ID. Returns an `Optional<AccountInfo>`.
-        - `AccountInfo save(AccountInfo accountInfo)`: Saves an account information entry. Returns the saved `AccountInfo`.
-        - `void deleteById(Long id)`: Deletes an account information entry by its ID.
+This repository объединяет **2 модуля**:
 
-7. **com.trading.bybit_api.domain.AccountInfo**
-    - **Fields:**
-        - `Long id`: The unique identifier of the account information.
-        - `String apiKey`: The API key associated with the account.
-        - `String apiSecret`: The API secret associated with the account.
-        - `String accountName`: The name of the account.
+- **Backend/** — Spring Boot API (Java) for Bybit trading bots
+- **Frontend/** — React + TypeScript UI to manage:
+  - risk profiles (via Django service)
+  - bots & trades (via Java service)
 
-8. **com.trading.bybit_api.dto.AccountInfoDto**
-    - **Fields:**
-        - `Long id`: The unique identifier of the account information.
-        - `String apiKey`: The API key associated with the account.
-        - `String apiSecret`: The API secret associated with the account.
-        - `String accountName`: The name of the account.
+---
+
+## Architecture (how it fits into the whole system)
+
+There are **3 repos** in the project:
+
+1) **Django Manager Service** (profiles CRUD + server assignment + WS “update” signaling)  
+2) **Watcher Service** (one per exchange: OKX/Binance; streams live risk state via WebSocket)  
+3) **This repo: Java Bot API + React UI**  
+   - Java handles **Bybit trading + trade history**
+   - React provides **single UI** for both “Risk Manager” and “Bots”
+
+**In production/normal usage** everything is wired behind a gateway/proxy and started by **docker compose from `infra/`**.
+
+---
+
+## Features
+
+### Java Backend (Spring Boot)
+- **Bots list** with KPI stats (PnL, winrate, drawdown, equity curve)
+- **Trades list** for a selected bot (trade history table)
+- **Webhook endpoint** to receive trading signals (e.g., TradingView)
+- **Test signal endpoint** to simulate a signal from UI (debug tool)
+- Storage:
+  - accounts (bots)
+  - trade history
+
+### React Frontend (Vite + TS + Tailwind)
+- **Risk Manager page**
+  - CRUD profiles via Django API
+  - Start/Stop profiles
+  - Live WS stream from watcher services (OKX/Binance)
+- **Bots page**
+  - List bots (Java API)
+  - Show bot metrics
+  - Show trades by period
+  - Send “test signal” to bot
+
+---
+
+## Backend (Java) overview
+
+### API Controllers
+
+#### `BotController`
+- `GET /bots`
+  - query params:
+    - `q` — search by name/key
+    - `status` — `RUNNING` / `PAUSED`
+    - `period` — `24h` (default), `7d`, `30d`
+  - returns list of `BotCardDto`
+
+#### `TradeController`
+- `GET /bots/{botId}/trades?period=...`
+  - returns list of `TradeRowDto`
+
+#### `TestSignalController`
+- `POST /bots/{botId}/test-signal`
+  - body: `TestSignalRequest`
+  - returns `{ ok: true }`
+
+#### `WebhookController` (Bybit signals)
+- `POST /api/v1/webhook/signal`
+  - body: `WebhookSignalDto`
+  - triggers bot logic via `WebhookService`
+
+---
+
+## Trading logic (high level)
+
+### `WebhookServiceImpl` strategy
+- Receives signal: `accountId`, `symbol`, `side`, `entryPrice`, `ATR`, etc.
+- Risk sizing:
+  - risk is fixed to **0.5%** of total balance
+  - `quantity = (totalBalance * 0.005) / ATR`
+- On **BUY (Long)**:
+  - ignores signal if position already open
+  - opens long with MARKET order
+  - sets:
+    - `stop = entry - ATR`
+    - `take = entry + ATR * 100`
+- On **SELL (Close)**:
+  - closes open position (if exists)
+  - updates trade history with calculated PnL
+
+---
+
+## Frontend (React) overview
+
+### Pages
+
+#### `RiskManager.tsx`
+- Loads profiles from Django:
+  - `GET /api/py/dj/tw/api/watcher/profiles/?all=1`
+- Opens WebSockets (via gateway):
+  - `ws://<host>/ws/okx/`
+  - `ws://<host>/ws/binance/`
+- Subscribes by sending IDs: `"1.4.5"`
+- Receives streaming rows and updates UI live
+- Start/Stop triggers:
+  - Django API calls (`/profile/start`, `/profile/stop`)
+  - then sends `"update"` into the WS so watcher reloads profiles immediately
+
+#### `Bots.tsx`
+- Loads bots from Java:
+  - `GET /api/java/bots?...`
+- Loads trades:
+  - `GET /api/java/bots/{id}/trades?period=...`
+- Sends test signal:
+  - `POST /api/java/bots/{id}/test-signal`
+
+---
+
+## API routing (through gateway)
+
+UI talks to different backends via prefixes:
+
+- **Django (profiles)**: `/api/py/dj/tw/api/...`
+- **Java (bots/trades)**: `/api/java/...`
+- **WebSockets**:
+  - `/ws/okx/` → OKX watcher
+  - `/ws/binance/` → Binance watcher
+
+So frontend uses `location.host` and doesn’t hardcode internal service ports.
+
+---
+
+## Run the whole system (recommended)
+
+✅ **Main way to run** — from `infra/` (docker-compose).
+
+Example (adjust paths to your infra repo):
+
+```bash
+cd infra
+docker compose up --build
+```

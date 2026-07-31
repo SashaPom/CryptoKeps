@@ -8,30 +8,7 @@
 
 ---
 
-## Suggested new repository names (rename ideas)
-
-Since you want to remove the old naming:
-
-### Neutral / product-like
-- `trading-dashboard`
-- `trading-control-center`
-- `trade-console`
-- `trading-suite`
-- `trading-platform-ui`
-
-### More “dev/tech” style
-- `trade-hub`
-- `trade-gateway-ui`
-- `bot-console`
-- `trading-ops`
-
-**My pick:** `trading-dashboard` (clear: UI + API for bots).
-
----
-
 ## What this repo contains
-
-This repository объединяет **2 модуля**:
 
 - **Backend/** — Spring Boot API (Java) for Bybit trading bots
 - **Frontend/** — React + TypeScript UI to manage:
